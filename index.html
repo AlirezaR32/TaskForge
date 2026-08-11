@@ -10,11 +10,11 @@
 
 <body>
     <header>
-        <nav>
+        <nav class="navbar">
             <h1>My Projects</h1>
             <div class="search-box">
                 <label for="search">Search Task</label>
-                <form action="#">
+                <form>
                     <input id="search" name="search" type="search" placeholder="Search tasks...">
                 </form>
             </div>
@@ -22,21 +22,21 @@
     </header>
     <main>
         <div class="task-board">
-            <section class="card">
+            <section class="task-column" data-status="todo">
                 <h2>TODO</h2>
                 <div class="task-list"></div>
             </section>
-            <section class="card">
+            <section class="task-column" data-status="doing">
                 <h2>DOING</h2>
                 <div class="task-list"></div>
             </section>
-            <section class="card">
+            <section class="task-column" data-status="done">
                 <h2>DONE</h2>
                 <div class="task-list"></div>
             </section>
         </div>
         <div>
-            <button>Add task</button>
+            <button type="button" id="add-task-btn">Add task</button>
         </div>
     </main>
     <footer></footer>

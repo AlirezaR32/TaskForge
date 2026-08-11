@@ -9,15 +9,15 @@ nav{
 }
 
 .task-board{
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
     margin: 3rem 0;
 
 }
 
-.card{
+.task-column{
     background-color: antiquewhite;
-    width: 12rem;
-    height: 24rem;
+    min-height: 24rem;
     text-align: center;
 }
