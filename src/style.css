@@ -1,0 +1,23 @@
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.search-box{
+    display: flex;
+    gap: 3px;
+}
+
+.task-board{
+    display: flex;
+    justify-content: space-around;
+    margin: 3rem 0;
+
+}
+
+.card{
+    background-color: antiquewhite;
+    width: 12rem;
+    height: 24rem;
+    text-align: center;
+}

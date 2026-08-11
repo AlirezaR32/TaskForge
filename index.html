@@ -1,30 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>TaskForge</title>
     <link rel="stylesheet" href="src/style.css">
 </head>
+
 <body>
     <header>
         <nav>
             <h1>My Projects</h1>
-            <form action="#">
-                <input type="text">
-            </form>
+            <div class="search-box">
+                <label for="search">Search Task</label>
+                <form action="#">
+                    <input id="search" name="search" type="search" placeholder="Search tasks...">
+                </form>
+            </div>
         </nav>
     </header>
     <main>
-        <section>
-            <h2>TODO</h2>
-        </section>
-        <section>
-            <h2>DOING</h2>
-        </section>
-        <section>
-            <h2>DONE</h2>
-        </section>
+        <div class="task-board">
+            <section class="card">
+                <h2>TODO</h2>
+                <div class="task-list"></div>
+            </section>
+            <section class="card">
+                <h2>DOING</h2>
+                <div class="task-list"></div>
+            </section>
+            <section class="card">
+                <h2>DONE</h2>
+                <div class="task-list"></div>
+            </section>
+        </div>
         <div>
             <button>Add task</button>
         </div>
@@ -33,4 +43,5 @@
 
     <script src="src/main.js"></script>
 </body>
+
 </html>
