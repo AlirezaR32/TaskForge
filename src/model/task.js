@@ -2,7 +2,8 @@ class Task{
     constructor(title, status, priority){
         this.title = title;
         this.status = status;
-        this.priority = priority;
+        this.priority = priority;    
+        this.createAt = new Date();  
     }
 
     changeStatus(status) {
