@@ -1,5 +1,8 @@
-class Task{
-    constructor(title, status, priority){
+export class Task{
+    static counter = 0;
+
+    constructor(title, status="todo", priority){
+        this.id = Task.counter++;
         this.title = title;
         this.status = status;
         this.priority = priority;    
@@ -11,9 +14,10 @@ class Task{
     }
 }
 
-class Taskbug extends Task{
+export class Taskbug extends Task{
     constructor(title, priority, severity) {
         super(title, "todo", priority);
         this.severity = severity
     }
 }
+
