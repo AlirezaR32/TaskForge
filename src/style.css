@@ -21,3 +21,17 @@ nav{
     min-height: 24rem;
     text-align: center;
 }
+
+.task-card{
+    background-color: #1b18db96;
+    margin: 1rem;
+    border-radius: 1rem;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.task-card > div > p {
+    margin: 0;
+}
