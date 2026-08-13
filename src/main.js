@@ -1,14 +1,14 @@
 import { Task, Taskbug } from "./model/task.js";
 
-let todo = []
+const tasks = []
 
-todo.push(new Task('salam', 'doing', 'low'))
-todo.push(new Task('salam', 'doing', 'low'))
-todo.push(new Task('salam', 'doing', 'low'))
-todo.push(new Task('salam', 'doing', 'low'))
-todo.push(new Task('salam', 'doing', 'low'))
+tasks.push(new Task('salam', 'doing', 'low'))
+tasks.push(new Task('salam', 'doing', 'low'))
+tasks.push(new Task('salam', 'doing', 'low'))
+tasks.push(new Task('salam', 'doing', 'low'))
+tasks.push(new Task('salam', 'doing', 'low'))
 
-console.log(todo)
+console.log(tasks)
 
 function renderTaskCard(task) {
     const card = document.createElement("article");
@@ -25,19 +25,19 @@ function renderTaskCard(task) {
     return card;
 }
 
-const task1 = new Task('salam', 'done', 'low')
+
 
 
 function addCard(task) {
     const card = renderTaskCard(task)
-    const todoList = document.querySelector(
+    const taskList = document.querySelector(
         `[data-status="${task.status}"] .task-list`
     );
 
-    todoList.append(card);
+    taskList.append(card);
 }
 
 
-todo.forEach(task => {
+tasks.forEach(task => {
     addCard(task)
 });
