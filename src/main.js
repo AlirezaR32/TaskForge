@@ -1,6 +1,6 @@
 import { Task } from "./model/task.js";
 import { addCard } from "./ui/taskView.js";
-const tasks = []
+let tasks = []
 
 
 const form = document.querySelector("#task-form");
@@ -20,4 +20,17 @@ form.addEventListener("submit", event => {
 })
 
 
+const taskBoard = document.querySelector(".task-board");
+
+taskBoard.addEventListener("click", (event) => {
+    if (event.target.classList.contains("delete-task")){
+        const card = event.target.closest(".task-card");
+        
+        card.remove()
+        const id = card.getAttribute("data-task-id");
+
+        tasks = tasks.filter(task => task.id != id);
+    }
+
+})
 
