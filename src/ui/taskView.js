@@ -1,4 +1,3 @@
-// reander the task
 export function renderTaskCard(task) {
     const card = document.createElement("article");
     card.classList.add("task-card");
