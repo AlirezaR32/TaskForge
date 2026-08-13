@@ -13,8 +13,8 @@
         <nav class="navbar">
             <h1>My Projects</h1>
             <div class="search-box">
-                <label for="search">Search Task</label>
                 <form>
+                    <label for="search">Search Task</label>
                     <input id="search" name="search" type="search" placeholder="Search tasks...">
                 </form>
             </div>
@@ -36,7 +36,29 @@
             </section>
         </div>
         <div>
-            <button type="button" id="add-task-btn">Add task</button>
+            <form id="task-form">
+
+                <h2>Add Task</h2>
+                
+                <label for="taskName">task name</lable>
+                    <input type="text" id="task-name" name="taskName" placeholder="task name" required>
+
+                    <label for="status">Status</label>
+                    <select name="status" id="task-status">
+                        <option value="todo">todo</option>
+                        <option value="doing">doing</option>
+                        <option value="done">done</option>
+                    </select>
+
+                    <label for="priority">Priority</label>
+                    <select name="priority" id="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <button type="submit" id="add-task-btn">Add task</button>
+
+            </form>
         </div>
     </main>
     <footer></footer>
