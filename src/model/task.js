@@ -2,7 +2,7 @@ export class Task{
     static counter = 0;
 
     constructor(title, status="todo", priority){
-        this.id = Task.counter++;
+        this.id = String(Task.counter++);
         this.title = title;
         this.status = status;
         this.priority = priority;    

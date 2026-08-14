@@ -13,7 +13,23 @@ export function renderTaskCard(task) {
     deleteButton.textContent = "Delete";
     deleteButton.classList.add("delete-task");
 
-    card.append(title, priority, deleteButton);
+    const status = document.createElement("select");
+    status.classList.add("task-status");
+    const statuses = ["todo", "doing", "done"];
+    
+    statuses.forEach((s) => {
+        const option = document.createElement("option");
+        option.value = s;
+        option.textContent = s.toUpperCase();
+
+        if (s === task.status) {
+            option.selected = true;
+        }
+
+        status.append(option);
+    })
+
+    card.append(title, priority, status, deleteButton);
     return card;
 }
 
@@ -24,6 +40,5 @@ export function addCard(task) {
     const taskList = document.querySelector(
         `[data-status="${task.status}"] .task-list`
     );
-
     taskList.append(card);
 }
