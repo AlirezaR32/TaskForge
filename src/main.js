@@ -64,7 +64,7 @@ taskBoard.addEventListener("change", (event) => {
 
 
 document.addEventListener("submit", event => {
-    if (event.target.classList.contains("edit-form")) {
+    if (!event.target.classList.contains("edit-form")) {
         return;
     }
     event.preventDefault();
