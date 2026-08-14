@@ -68,36 +68,36 @@ document.addEventListener("submit", event => {
         return;
     }
     event.preventDefault();
-    
-        const form = event.target;
-        const id = form.dataset.taskId;
 
-        const task = tasks.find((task) => task.id === id);
-        if (!task) return;
+    const form = event.target;
+    const id = form.dataset.taskId;
 
-        const title = form.querySelector('#edit-task-name').value;
-        const status = form.querySelector("#edit-task-status").value;
-        const priority = form.querySelector("#edit-task-priority").value;
+    const task = tasks.find((task) => task.id === id);
+    if (!task) return;
+
+    const title = form.querySelector('#edit-task-name').value;
+    const status = form.querySelector("#edit-task-status").value;
+    const priority = form.querySelector("#edit-task-priority").value;
 
 
-        task.title = title;
-        task.status = status;
-        task.priority = priority;
+    task.title = title;
+    task.status = status;
+    task.priority = priority;
 
-        const card = document.querySelector(`[data-task-id="${id}"]`);
-        card.remove()
-        addCard(task);
-        form.remove();
+    const card = document.querySelector(`[data-task-id="${id}"]`);
+    card.remove()
+    addCard(task);
+    form.remove();
 
-    });
+});
 
 
 // search
 const searchInput = document.querySelector("#search")
 
-function renderSearchRes(taskList) {
+function renderTasks(taskList) {
     const taskLists = document.querySelectorAll(".task-list");
-    
+
     taskLists.forEach(taskList => {
         taskList.innerHTML = "";
     })
@@ -111,7 +111,44 @@ searchInput.addEventListener("input", event => {
     const filterTask = tasks.filter(task =>
         task.title.toLowerCase().includes(query.toLowerCase())
     );
-    
-    renderSearchRes(filterTask);
+
+    renderTasks(filterTask);
 
 })
+
+
+// fillter
+
+
+
+function applyFilter(task) {
+    const status = statusFilter.value;
+    const priority = priorityFilter.value;
+
+    const statusMatch =
+        status === "all" || task.status === status;
+
+    const priorityMatch =
+        priority === "all" || task.priority === priority;
+
+    return statusMatch && priorityMatch;
+}
+
+
+
+
+
+const statusFilter = document.querySelector("#status-filter");
+const priorityFilter = document.querySelector("#priority-filter");
+
+
+function updateFilters() {
+    const filteredTasks = tasks.filter(task => {
+        return applyFilter(task);
+    });
+
+    renderTasks(filteredTasks);
+}
+
+statusFilter.addEventListener("change", updateFilters);
+priorityFilter.addEventListener("change", updateFilters);

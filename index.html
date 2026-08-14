@@ -16,6 +16,21 @@
                 <form>
                     <label for="search">Search Task</label>
                     <input id="search" name="search" type="search" placeholder="Search tasks...">
+                    <div class="filters">
+                        <select id="status-filter">
+                            <option value="all">All Status</option>
+                            <option value="todo">TODO</option>
+                            <option value="doing">DOING</option>
+                            <option value="done">DONE</option>
+                        </select>
+
+                        <select id="priority-filter">
+                            <option value="all">All Priority</option>
+                            <option value="low">LOW</option>
+                            <option value="medium">MEDIUM</option>
+                            <option value="high">HIGH</option>
+                        </select>
+                    </div>
                 </form>
             </div>
         </nav>
