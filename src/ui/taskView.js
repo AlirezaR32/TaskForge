@@ -61,7 +61,7 @@ export function renderEditForm(task) {
     nameInput.value = task.title;    
     const status = document.createElement("select");
     status.setAttribute("id", "edit-task-status");
-    status.classList.add("task-status");
+    status.classList.add("edit-task-status");
     const statuses = ["todo", "doing", "done"];
     
     statuses.forEach((s) => {
@@ -79,7 +79,7 @@ export function renderEditForm(task) {
 
     const priority = document.createElement("select");
     priority.setAttribute("id", "edit-task-priority");
-    priority.classList.add("task-priority");
+    priority.classList.add("edit-task-priority");
     const priorities = ["low", "medium", "high"];
     
     priorities.forEach((s) => {
@@ -106,8 +106,9 @@ export function renderEditForm(task) {
 }
 
 export function showEditForm(task) {
+    if (document.querySelector(".edit-form")) return;
+    
     const form = renderEditForm(task);
-
 
     document.body.append(form)
 

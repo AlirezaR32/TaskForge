@@ -7,9 +7,9 @@ const form = document.querySelector("#task-form");
 form.addEventListener("submit", event => {
     event.preventDefault();
 
-    const title = document.querySelector('#task-name').value;
-    const status = document.querySelector("#task-status").value;
-    const priority = document.querySelector("#task-priority").value;
+    const title = form.querySelector('#task-name').value;
+    const status = form.querySelector("#task-status").value;
+    const priority = form.querySelector("#task-priority").value;
 
     const task = new Task(title, status, priority)
 
@@ -38,7 +38,6 @@ taskBoard.addEventListener("click", (event) => {
         const id = card.dataset.taskId
 
         const task = tasks.find((task) => task.id === id)
-        console.log(task)
         showEditForm(task)
     }
 
@@ -71,6 +70,7 @@ document.addEventListener("submit", event => {
         const id = form.dataset.taskId;
 
         const task = tasks.find((task) => task.id === id);
+        if(!task) return;
 
         const title = document.querySelector('#edit-task-name').value;
         const status = document.querySelector("#edit-task-status").value;
