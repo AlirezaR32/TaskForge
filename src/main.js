@@ -64,27 +64,54 @@ taskBoard.addEventListener("change", (event) => {
 
 
 document.addEventListener("submit", event => {
-    event.preventDefault();
     if (event.target.classList.contains("edit-form")) {
+        return;
+    }
+    event.preventDefault();
+    
         const form = event.target;
         const id = form.dataset.taskId;
 
         const task = tasks.find((task) => task.id === id);
-        if(!task) return;
+        if (!task) return;
 
-        const title = document.querySelector('#edit-task-name').value;
-        const status = document.querySelector("#edit-task-status").value;
-        const priority = document.querySelector("#edit-task-priority").value;
+        const title = form.querySelector('#edit-task-name').value;
+        const status = form.querySelector("#edit-task-status").value;
+        const priority = form.querySelector("#edit-task-priority").value;
 
 
         task.title = title;
         task.status = status;
         task.priority = priority;
-        
+
         const card = document.querySelector(`[data-task-id="${id}"]`);
         card.remove()
         addCard(task);
         form.remove();
 
-    }
-});
+    });
+
+
+// search
+const searchInput = document.querySelector("#search")
+
+function renderSearchRes(taskList) {
+    const taskLists = document.querySelectorAll(".task-list");
+    
+    taskLists.forEach(taskList => {
+        taskList.innerHTML = "";
+    })
+
+    taskList.forEach(task => {
+        addCard(task);
+    });
+}
+searchInput.addEventListener("input", event => {
+    const query = event.target.value;
+    const filterTask = tasks.filter(task =>
+        task.title.toLowerCase().includes(query.toLowerCase())
+    );
+    
+    renderSearchRes(filterTask);
+
+})
