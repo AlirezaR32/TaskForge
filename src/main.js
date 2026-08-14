@@ -1,5 +1,5 @@
 import { Task } from "./model/task.js";
-import { addCard } from "./ui/taskView.js";
+import { addCard, showEditForm } from "./ui/taskView.js";
 let tasks = []
 
 
@@ -32,6 +32,16 @@ taskBoard.addEventListener("click", (event) => {
         card.remove()
     }
 
+    if (event.target.classList.contains("edit-task")) {
+        const card = event.target.closest(".task-card");
+
+        const id = card.dataset.taskId
+
+        const task = tasks.find((task) => task.id === id)
+        console.log(task)
+        showEditForm(task)
+    }
+
 })
 
 
@@ -41,7 +51,7 @@ taskBoard.addEventListener("change", (event) => {
 
         const id = card.dataset.taskId
 
-        const task = tasks.find((task) => task.id === id )
+        const task = tasks.find((task) => task.id === id)
 
         if (!task) return;
         task.status = event.target.value
@@ -51,3 +61,30 @@ taskBoard.addEventListener("change", (event) => {
 
     }
 })
+
+
+
+document.addEventListener("submit", event => {
+    event.preventDefault();
+    if (event.target.classList.contains("edit-form")) {
+        const form = event.target;
+        const id = form.dataset.taskId;
+
+        const task = tasks.find((task) => task.id === id);
+
+        const title = document.querySelector('#edit-task-name').value;
+        const status = document.querySelector("#edit-task-status").value;
+        const priority = document.querySelector("#edit-task-priority").value;
+
+
+        task.title = title;
+        task.status = status;
+        task.priority = priority;
+        
+        const card = document.querySelector(`[data-task-id="${id}"]`);
+        card.remove()
+        addCard(task);
+        form.remove();
+
+    }
+});
