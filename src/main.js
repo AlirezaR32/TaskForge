@@ -1,7 +1,9 @@
 import { Task } from "./model/task.js";
 import { addCard, showEditForm } from "./ui/taskView.js";
-let tasks = []
+import { saveTasks, getTasks } from "./services/storage.js";
 
+let tasks = getTasks();
+renderTasks(tasks);
 
 const form = document.querySelector("#task-form");
 form.addEventListener("submit", event => {
@@ -14,6 +16,7 @@ form.addEventListener("submit", event => {
     const task = new Task(title, status, priority)
 
     tasks.push(task);
+    saveTasks(tasks);
     addCard(task);
 
     form.reset();
@@ -29,6 +32,7 @@ taskBoard.addEventListener("click", (event) => {
         const id = card.getAttribute("data-task-id");
 
         tasks = tasks.filter(task => task.id !== id);
+        saveTasks(tasks);
         card.remove()
     }
 
