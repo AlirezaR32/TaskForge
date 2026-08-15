@@ -106,22 +106,26 @@ function renderTasks(taskList) {
         addCard(task);
     });
 }
-searchInput.addEventListener("input", event => {
-    const query = event.target.value;
-    const filterTask = tasks.filter(task =>
-        task.title.toLowerCase().includes(query.toLowerCase())
-    );
 
-    renderTasks(filterTask);
+searchInput.addEventListener("input", updateView);
 
-})
+function matchesSearch(task) {
+    const query = searchInput.value.toLowerCase();
+
+    return task.title.toLowerCase().includes(query);
+}
+
+
 
 
 // fillter
 
 
+const statusFilter = document.querySelector("#status-filter");
+const priorityFilter = document.querySelector("#priority-filter");
 
-function applyFilter(task) {
+
+function matchesFilters(task) {
     const status = statusFilter.value;
     const priority = priorityFilter.value;
 
@@ -134,21 +138,15 @@ function applyFilter(task) {
     return statusMatch && priorityMatch;
 }
 
+statusFilter.addEventListener("change", updateView);
+priorityFilter.addEventListener("change", updateView);
 
-
-
-
-const statusFilter = document.querySelector("#status-filter");
-const priorityFilter = document.querySelector("#priority-filter");
-
-
-function updateFilters() {
-    const filteredTasks = tasks.filter(task => {
-        return applyFilter(task);
+function getFilteredTasks() {
+    return tasks.filter(task => {
+        return matchesSearch(task) && matchesFilters(task);
     });
-
-    renderTasks(filteredTasks);
 }
 
-statusFilter.addEventListener("change", updateFilters);
-priorityFilter.addEventListener("change", updateFilters);
+function updateView() {
+    renderTasks(getFilteredTasks())
+}
