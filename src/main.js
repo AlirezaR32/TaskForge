@@ -1,6 +1,7 @@
 import { Task } from "./model/task.js";
 import { addCard, showEditForm } from "./ui/taskView.js";
 import { saveTasks, getTasks } from "./services/storage.js";
+import { getUIState,saveUIState } from "./services/sessionStorage.js";
 
 // render task
 function renderTasks(taskList) {
@@ -17,6 +18,19 @@ function renderTasks(taskList) {
 
 let tasks = getTasks();
 renderTasks(tasks);
+
+const uiState = getUIState();
+
+const statusFilter = document.querySelector("#status-filter");
+const priorityFilter = document.querySelector("#priority-filter");
+const searchInput = document.querySelector("#search");
+
+priorityFilter.value = uiState.priority;
+searchInput.value = uiState.search;
+statusFilter.value = uiState.status;
+
+updateView();
+
 
 //add task 
 const form = document.querySelector("#task-form");
@@ -114,13 +128,12 @@ document.addEventListener("submit", event => {
 
 
 // search
-const searchInput = document.querySelector("#search")
-
 
 searchInput.addEventListener("input", updateView);
 
 function matchesSearch(task) {
     const query = searchInput.value.toLowerCase();
+    saveUIState({...uiState,"search" : query})
 
     return task.title.toLowerCase().includes(query);
 }
@@ -129,11 +142,6 @@ function matchesSearch(task) {
 
 
 // fillter
-
-
-const statusFilter = document.querySelector("#status-filter");
-const priorityFilter = document.querySelector("#priority-filter");
-
 
 function matchesFilters(task) {
     const status = statusFilter.value;
@@ -144,6 +152,8 @@ function matchesFilters(task) {
 
     const priorityMatch =
         priority === "all" || task.priority === priority;
+
+    saveUIState({...uiState, status: status,priority: priority})
 
     return statusMatch && priorityMatch;
 }
