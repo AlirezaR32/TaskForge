@@ -2,20 +2,12 @@ import { Task } from "./model/task.js";
 import { addCard, showEditForm } from "./ui/taskView.js";
 import { saveTasks, getTasks } from "./services/storage.js";
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
+import { matchesFilters,matchesSearch ,getFilteredTasks } from "./features/taskFilters.js";
+import { renderTasks } from "./ui/taskView.js";
+
+
 
 // render task
-function renderTasks(taskList) {
-    const taskLists = document.querySelectorAll(".task-list");
-
-    taskLists.forEach(taskList => {
-        taskList.innerHTML = "";
-    })
-
-    taskList.forEach(task => {
-        addCard(task);
-    });
-}
-
 let tasks = getTasks();
 renderTasks(tasks);
 
@@ -51,10 +43,11 @@ form.addEventListener("submit", event => {
 })
 
 
-// delete task 
+// delete task
 const taskBoard = document.querySelector(".task-board");
 taskBoard.addEventListener("click", (event) => {
-    const deleteButton = event.target.closest(".delete-task")
+    const deleteButton = event.target.closest(".delete-task");
+    const editButton = event.target.closest(".edit-task");
     if (deleteButton) {
         const card = deleteButton.closest(".task-card");
 
@@ -99,8 +92,8 @@ taskBoard.addEventListener("change", (event) => {
 
 //edit task
 document.addEventListener("submit", event => {
-    const editButton = event.target.closest(".edit-form")
-    if (!editButton) {
+    const editForm = event.target.closest(".edit-form")
+    if (!editForm) {
         return;
     }
     event.preventDefault();
@@ -131,43 +124,16 @@ document.addEventListener("submit", event => {
 
 
 // search
-
 searchInput.addEventListener("input", () => {
     updateView();
 });
 
-function matchesSearch(task) {
-    const query = searchInput.value.toLowerCase();
-
-    return task.title.toLowerCase().includes(query);
-}
-
-
-
 
 // fillter
-
-function matchesFilters(task) {
-    const status = statusFilter.value;
-    const priority = priorityFilter.value;
-
-    const statusMatch =
-        status === "all" || task.status === status;
-
-    const priorityMatch =
-        priority === "all" || task.priority === priority;
-
-    return statusMatch && priorityMatch;
-}
-
 statusFilter.addEventListener("change", updateView);
 priorityFilter.addEventListener("change", updateView);
 
-function getFilteredTasks() {
-    return tasks.filter(task => {
-        return matchesSearch(task) && matchesFilters(task);
-    });
-}
+
 
 function updateView() {
     saveUIState({
@@ -175,5 +141,11 @@ function updateView() {
         status: statusFilter.value,
         priority: priorityFilter.value
     });
-    renderTasks(getFilteredTasks())
+    const filteredTasks = getFilteredTasks(
+        tasks,
+        searchInput.value,
+        statusFilter.value,
+        priorityFilter.value
+    );
+    renderTasks(filteredTasks);
 }

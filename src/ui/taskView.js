@@ -1,3 +1,15 @@
+export function renderTasks(taskList) {
+    const taskLists = document.querySelectorAll(".task-list");
+
+    taskLists.forEach(taskList => {
+        taskList.innerHTML = "";
+    })
+
+    taskList.forEach(task => {
+        addCard(task);
+    });
+}
+
 export function renderTaskCard(task) {
     const card = document.createElement("article");
     card.classList.add("task-card");
