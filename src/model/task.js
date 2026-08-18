@@ -6,7 +6,7 @@ export class Task{
         this.title = title;
         this.status = status;
         this.priority = priority;    
-        this.createAt = new Date();  
+        this.createdAt = new Date();  
     }
 
     changeStatus(status) {
@@ -22,7 +22,7 @@ export class UrgentTask extends Task{
         this.deadline = deadline;
     }
 
-    isUrgent(){
-        return this.priority == "high";
-    }
+    isOverdue() {
+    return new Date(this.deadline) < new Date();
+}
 }

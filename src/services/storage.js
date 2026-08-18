@@ -27,15 +27,15 @@ function rehydrateTask(data) {
     let task;
 
     if (data.deadline !== undefined && data.deadline !== null) {
-        task = new UrgentTask(data.title, data.status, data.priority, data.deadline);
+        task = new UrgentTask(data.title, data.status, data.deadline);
     } else {
         task = new Task(data.title, data.status, data.priority);
     }
 
     // Preserve the original id and createdAt instead of the freshly generated ones
     task.id = data.id;
-    if (data.createAt) {
-        task.createAt = new Date(data.createAt);
+    if (data.createdAt) {
+        task.createdAt = new Date(data.createdAt);
     }
 
     // Keep the id counter ahead of any existing ids to avoid collisions
