@@ -54,8 +54,9 @@ form.addEventListener("submit", event => {
 // delete task 
 const taskBoard = document.querySelector(".task-board");
 taskBoard.addEventListener("click", (event) => {
-    if (event.target.classList.contains("delete-task")) {
-        const card = event.target.closest(".task-card");
+    const deleteButton = event.target.closest(".delete-task")
+    if (deleteButton) {
+        const card = deleteButton.closest(".task-card" );
 
         const id = card.getAttribute("data-task-id");
 
