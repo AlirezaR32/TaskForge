@@ -26,9 +26,9 @@ async function loadTasks() {
 
 loadTasks();
 
-console.log(tasks)
+// console.log(tasks);
 
-renderTasks(tasks);
+// renderTasks(tasks);
 
 const uiState = getUIState();
 

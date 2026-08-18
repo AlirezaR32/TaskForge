@@ -11,7 +11,7 @@ export async function fetchTasks() {
     return data.map(task => ({
         id: String(task.id),
         title: task.title,
-        status: task.compeleted? "done" : "doing",
+        status: task.completed? "done" : "todo",
         priority: "low"
     }));
 }
