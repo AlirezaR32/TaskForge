@@ -14,10 +14,15 @@ export class Task{
     }
 }
 
-export class Taskbug extends Task{
-    constructor(title, priority, severity) {
-        super(title, "todo", priority);
-        this.severity = severity
+
+
+export class UrgentTask extends Task{
+    constructor(title, status, deadline){
+        super(title, status, "high");
+        this.deadline = deadline;
+    }
+
+    isUrgent(){
+        return this.priority == "high";
     }
 }
-

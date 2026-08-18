@@ -70,8 +70,16 @@
                     <option value="low">Low</option>
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
                 </select>
+
+                <div id="deadline-field" class="deadline-field" hidden>
+                    <label for="task-deadline">Deadline</label>
+                    <input type="datetime-local" id="task-deadline" name="deadline">
+                </div>
+
                 <button type="submit" id="add-task-btn">Add Task</button>
+
 
             </form>
         </div>

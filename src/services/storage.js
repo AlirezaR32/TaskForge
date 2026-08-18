@@ -1,3 +1,5 @@
+import { Task, UrgentTask } from "../model/task.js";
+
 const STORAGE_KEY = "taskforge_tasks"
 export function saveTasks(tasks) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
@@ -12,11 +14,37 @@ export function getTasks() {
             return [];
         }
 
-        return JSON.parse(data);
+        const parsed = JSON.parse(data);
+        return parsed.map(rehydrateTask);
     } catch (error) {
         console.error("Failed to load tasks:", error);
         return [];
     }
+}
+
+// Convert a plain object from storage back into a Task/UrgentTask instance
+function rehydrateTask(data) {
+    let task;
+
+    if (data.deadline !== undefined && data.deadline !== null) {
+        task = new UrgentTask(data.title, data.status, data.priority, data.deadline);
+    } else {
+        task = new Task(data.title, data.status, data.priority);
+    }
+
+    // Preserve the original id and createdAt instead of the freshly generated ones
+    task.id = data.id;
+    if (data.createAt) {
+        task.createAt = new Date(data.createAt);
+    }
+
+    // Keep the id counter ahead of any existing ids to avoid collisions
+    const numericId = Number(data.id);
+    if (!Number.isNaN(numericId) && numericId >= Task.counter) {
+        Task.counter = numericId + 1;
+    }
+
+    return task;
 }
 
 export function clearTasks() {

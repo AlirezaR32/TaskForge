@@ -1,4 +1,4 @@
-import { Task } from "./model/task.js";
+import { Task, UrgentTask } from "./model/task.js";
 import { addCard, showEditForm } from "./ui/taskView.js";
 import { saveTasks, getTasks } from "./services/storage.js";
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
@@ -26,20 +26,45 @@ updateView();
 
 //add task 
 const form = document.querySelector("#task-form");
+const prioritySelect = form.querySelector("#task-priority");
+const deadlineField = form.querySelector("#deadline-field");
+const deadlineInput = form.querySelector("#task-deadline");
+
+// show/hide the deadline field when "Urgent" is selected
+function toggleDeadlineField() {
+    const isUrgent = prioritySelect.value === "urgent";
+    deadlineField.hidden = !isUrgent;
+    deadlineInput.required = isUrgent;
+    if (!isUrgent) {
+        deadlineInput.value = "";
+    }
+}
+
+prioritySelect.addEventListener("change", toggleDeadlineField);
+toggleDeadlineField();
+
 form.addEventListener("submit", event => {
     event.preventDefault();
 
     const title = form.querySelector('#task-name').value;
     const status = form.querySelector("#task-status").value;
-    const priority = form.querySelector("#task-priority").value;
+    const selectedPriority = prioritySelect.value;
 
-    const task = new Task(title, status, priority)
+    let task;
+
+    if (selectedPriority === "urgent") {
+        const deadline = deadlineInput.value;
+        task = new UrgentTask(title, status, deadline);
+    } else {
+        task = new Task(title, status, selectedPriority);
+    }
 
     tasks.push(task);
     saveTasks(tasks);
     addCard(task);
 
     form.reset();
+    toggleDeadlineField();
 })
 
 

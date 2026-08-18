@@ -18,8 +18,22 @@ export function renderTaskCard(task) {
     const title = document.createElement("h3");
     title.textContent = task.title;
 
+    const isUrgent = task.deadline !== undefined && task.deadline !== null;
+    if (isUrgent) {
+        card.classList.add("urgent-task");
+    }
+
     const priority = document.createElement('span');
-    priority.textContent = task.priority
+    priority.classList.add("task-priority-badge");
+    priority.textContent = isUrgent ? "URGENT" : task.priority;
+
+    if (isUrgent && task.deadline) {
+        const deadline = document.createElement("span");
+        deadline.classList.add("task-deadline");
+        const formatted = formatDeadline(task.deadline);
+        deadline.textContent = `⏰ ${formatted}`;
+        card.append(deadline);
+    }
 
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
@@ -47,6 +61,14 @@ export function renderTaskCard(task) {
 
     card.append(title, priority, status, deleteButton, editButton);
     return card;
+}
+
+function formatDeadline(deadline) {
+    const date = new Date(deadline);
+    if (isNaN(date.getTime())) {
+        return String(deadline);
+    }
+    return date.toLocaleString();
 }
 
 
