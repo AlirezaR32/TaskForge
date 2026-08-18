@@ -4,11 +4,30 @@ import { saveTasks, getTasks } from "./services/storage.js";
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
 import { matchesFilters,matchesSearch ,getFilteredTasks } from "./features/taskFilters.js";
 import { renderTasks } from "./ui/taskView.js";
-
-
+import {fetchTasks} from "./api/taskApi.js"
 
 // render task
-let tasks = getTasks();
+let tasks;
+// tasks = getTasks();
+// console.log(tasks)
+
+// api
+async function loadTasks() {
+    try {
+        const apiTasks = await fetchTasks();
+
+        tasks = apiTasks;
+
+        renderTasks(tasks);
+    } catch (error) {
+        console.error("Failed to load tasks:", error);
+    }
+};
+
+loadTasks();
+
+console.log(tasks)
+
 renderTasks(tasks);
 
 const uiState = getUIState();
