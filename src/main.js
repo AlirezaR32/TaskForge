@@ -56,7 +56,7 @@ const taskBoard = document.querySelector(".task-board");
 taskBoard.addEventListener("click", (event) => {
     const deleteButton = event.target.closest(".delete-task")
     if (deleteButton) {
-        const card = deleteButton.closest(".task-card" );
+        const card = deleteButton.closest(".task-card");
 
         const id = card.getAttribute("data-task-id");
 
@@ -65,8 +65,8 @@ taskBoard.addEventListener("click", (event) => {
         card.remove()
     }
 
-    if (event.target.classList.contains("edit-task")) {
-        const card = event.target.closest(".task-card");
+    if (editButton) {
+        const card = editButton.closest(".task-card");
 
         const id = card.dataset.taskId
 
@@ -78,6 +78,7 @@ taskBoard.addEventListener("click", (event) => {
 
 // status change
 taskBoard.addEventListener("change", (event) => {
+
     if (event.target.classList.contains("task-status")) {
         const card = event.target.closest(".task-card");
 
@@ -98,7 +99,8 @@ taskBoard.addEventListener("change", (event) => {
 
 //edit task
 document.addEventListener("submit", event => {
-    if (!event.target.classList.contains("edit-form")) {
+    const editButton = event.target.closest(".edit-form")
+    if (!editButton) {
         return;
     }
     event.preventDefault();
