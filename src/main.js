@@ -2,9 +2,23 @@ import { Task } from "./model/task.js";
 import { addCard, showEditForm } from "./ui/taskView.js";
 import { saveTasks, getTasks } from "./services/storage.js";
 
+// render task
+function renderTasks(taskList) {
+    const taskLists = document.querySelectorAll(".task-list");
+
+    taskLists.forEach(taskList => {
+        taskList.innerHTML = "";
+    })
+
+    taskList.forEach(task => {
+        addCard(task);
+    });
+}
+
 let tasks = getTasks();
 renderTasks(tasks);
 
+//add task 
 const form = document.querySelector("#task-form");
 form.addEventListener("submit", event => {
     event.preventDefault();
@@ -23,8 +37,8 @@ form.addEventListener("submit", event => {
 })
 
 
+// delete task 
 const taskBoard = document.querySelector(".task-board");
-
 taskBoard.addEventListener("click", (event) => {
     if (event.target.classList.contains("delete-task")) {
         const card = event.target.closest(".task-card");
@@ -47,7 +61,7 @@ taskBoard.addEventListener("click", (event) => {
 
 })
 
-
+// status change
 taskBoard.addEventListener("change", (event) => {
     if (event.target.classList.contains("task-status")) {
         const card = event.target.closest(".task-card");
@@ -57,7 +71,8 @@ taskBoard.addEventListener("change", (event) => {
         const task = tasks.find((task) => task.id === id)
 
         if (!task) return;
-        task.status = event.target.value
+        task.status = event.target.value;
+        saveTasks(tasks);
 
         card.remove()
         addCard(task)
@@ -66,7 +81,7 @@ taskBoard.addEventListener("change", (event) => {
 })
 
 
-
+//edit task
 document.addEventListener("submit", event => {
     if (!event.target.classList.contains("edit-form")) {
         return;
@@ -87,6 +102,8 @@ document.addEventListener("submit", event => {
     task.title = title;
     task.status = status;
     task.priority = priority;
+    
+    saveTasks(tasks);
 
     const card = document.querySelector(`[data-task-id="${id}"]`);
     card.remove()
@@ -99,17 +116,6 @@ document.addEventListener("submit", event => {
 // search
 const searchInput = document.querySelector("#search")
 
-function renderTasks(taskList) {
-    const taskLists = document.querySelectorAll(".task-list");
-
-    taskLists.forEach(taskList => {
-        taskList.innerHTML = "";
-    })
-
-    taskList.forEach(task => {
-        addCard(task);
-    });
-}
 
 searchInput.addEventListener("input", updateView);
 

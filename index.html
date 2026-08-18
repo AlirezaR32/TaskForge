@@ -11,10 +11,10 @@
 <body>
     <header>
         <nav class="navbar">
-            <h1>My Projects</h1>
+            <h1>TaskForge</h1>
             <div class="search-box">
                 <form>
-                    <label for="search">Search Task</label>
+                    <label for="search">Search</label>
                     <input id="search" name="search" type="search" placeholder="Search tasks...">
                     <div class="filters">
                         <select id="status-filter">
@@ -55,14 +55,14 @@
 
                 <h2>Add Task</h2>
 
-                <label for="task-name">task name</label>
-                <input type="text" id="task-name" name="taskName" placeholder="task name" required>
+                <label for="task-name">Task Name</label>
+                <input type="text" id="task-name" name="taskName" placeholder="What needs to be done?" required>
 
                 <label for="task-status">Status</label>
                 <select name="status" id="task-status">
-                    <option value="todo">todo</option>
-                    <option value="doing">doing</option>
-                    <option value="done">done</option>
+                    <option value="todo">TODO</option>
+                    <option value="doing">DOING</option>
+                    <option value="done">DONE</option>
                 </select>
 
                 <label for="task-priority">Priority</label>
@@ -71,12 +71,14 @@
                     <option value="medium">Medium</option>
                     <option value="high">High</option>
                 </select>
-                <button type="submit" id="add-task-btn">Add task</button>
+                <button type="submit" id="add-task-btn">Add Task</button>
 
             </form>
         </div>
     </main>
-    <footer></footer>
+    <footer>
+        <p>TaskForge — Built with Vanilla JavaScript</p>
+    </footer>
 
     <script type="module" src="src/main.js"></script>
 </body>
