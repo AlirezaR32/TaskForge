@@ -2,33 +2,46 @@ import { Task, UrgentTask } from "./model/task.js";
 import { addCard, showEditForm } from "./ui/taskView.js";
 import { saveTasks, getTasks } from "./services/storage.js";
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
-import { matchesFilters,matchesSearch ,getFilteredTasks } from "./features/taskFilters.js";
+import { matchesFilters, matchesSearch, getFilteredTasks } from "./features/taskFilters.js";
 import { renderTasks } from "./ui/taskView.js";
-import {fetchTasks} from "./api/taskApi.js"
+import { fetchTasks } from "./api/taskApi.js"
+import { renderState } from "./ui/stateView.js";        
+
 
 // render task
-let tasks;
+let tasks = [];
 // tasks = getTasks();
+
+renderTasks(tasks);
 // console.log(tasks)
 
 // api
 async function loadTasks() {
+    renderState("loading");
+
     try {
-        const apiTasks = await fetchTasks();
+        tasks = await fetchTasks();
 
-        tasks = apiTasks;
+        if (tasks.length === 0) {
+            renderState("empty-data");
+            return;
+        }
 
-        renderTasks(tasks);
+        renderState("success");
+        updateView();
+
     } catch (error) {
-        console.error("Failed to load tasks:", error);
+        console.error(error);
+
+        renderState("error");
     }
-};
+}
 
 loadTasks();
 
 // console.log(tasks);
 
-// renderTasks(tasks);
+
 
 const uiState = getUIState();
 
@@ -78,9 +91,13 @@ form.addEventListener("submit", event => {
         task = new Task(title, status, selectedPriority);
     }
 
-    tasks.push(task);
-    saveTasks(tasks);
-    addCard(task);
+    try {
+        tasks.push(task);
+        saveTasks(tasks);
+        addCard(task);
+    } catch (error) {
+        renderState("error");
+    }
 
     form.reset();
     toggleDeadlineField();
@@ -97,9 +114,14 @@ taskBoard.addEventListener("click", (event) => {
 
         const id = card.getAttribute("data-task-id");
 
-        tasks = tasks.filter(task => task.id !== id);
-        saveTasks(tasks);
-        card.remove()
+
+        try {
+            tasks = tasks.filter(task => task.id !== id);
+            saveTasks(tasks);
+            card.remove();
+        } catch (error) {
+            renderState("error");
+        }
     }
 
     if (editButton) {
@@ -124,11 +146,15 @@ taskBoard.addEventListener("change", (event) => {
         const task = tasks.find((task) => task.id === id)
 
         if (!task) return;
-        task.status = event.target.value;
-        saveTasks(tasks);
 
-        card.remove()
-        addCard(task)
+        try {
+            task.status = event.target.value;
+            saveTasks(tasks);
+            card.remove();
+            addCard(task);
+        } catch (error) {
+            renderState("error");
+        }
 
     }
 })
@@ -157,12 +183,18 @@ document.addEventListener("submit", event => {
     task.status = status;
     task.priority = priority;
 
-    saveTasks(tasks);
 
-    const card = document.querySelector(`[data-task-id="${id}"]`);
-    card.remove()
-    addCard(task);
-    form.remove();
+
+    try {
+        saveTasks(tasks);
+
+        const card = document.querySelector(`[data-task-id="${id}"]`);
+        card.remove()
+        addCard(task);
+        form.remove();
+    } catch (error) {
+        renderState("error");
+    }
 
 });
 
@@ -197,10 +229,10 @@ function updateView() {
 
 
 
-function getTaskStates () {
-    return{
+function getTaskStates() {
+    return {
         total: tasks.length,
-        todo: tasks.filter((task) => task.status =='todo').length,
+        todo: tasks.filter((task) => task.status == 'todo').length,
         doing: tasks.filter((task) => task.ststus === "doing").length,
         done: tasks.filter((task) => task.status === "done").length,
 
@@ -213,7 +245,7 @@ function getTaskByStates(tasks) {
     return tasks.reduce((stats, task) => {
         stats[task.status]++;
         return stats
-    },{
+    }, {
         todo: 0,
         doing: 0,
         done: 0

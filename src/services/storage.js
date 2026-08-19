@@ -2,7 +2,12 @@ import { Task, UrgentTask } from "../model/task.js";
 
 const STORAGE_KEY = "taskforge_tasks"
 export function saveTasks(tasks) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    } catch {
+        throw new Error("Failed to save tasks");
+    }
+
 }
 
 
@@ -17,8 +22,7 @@ export function getTasks() {
         const parsed = JSON.parse(data);
         return parsed.map(rehydrateTask);
     } catch (error) {
-        console.error("Failed to load tasks:", error);
-        return [];
+        throw new Error("Failed to load tasks:", error);
     }
 }
 
