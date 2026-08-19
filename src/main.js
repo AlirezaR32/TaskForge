@@ -7,37 +7,38 @@ import { renderTasks } from "./ui/taskView.js";
 import { fetchTasks } from "./api/taskApi.js";
 import { renderState } from "./ui/stateView.js";
 import { createTask, deleteTask, findTask, updateTask, changeTaskStatus } from "./features/taskActions.js";
+import { setupAddTask, setupEditForm, setupTaskBoard } from "./features/taskEvents.js";
 
 // render task
 let tasks = [];
-// tasks = getTasks();
+tasks = getTasks();
 
 renderTasks(tasks);
 // console.log(tasks)
 
 // api
-async function loadTasks() {
-    renderState("loading");
+// async function loadTasks() {
+//     renderState("loading");
 
-    try {
-        tasks = await fetchTasks();
+//     try {
+//         tasks = await fetchTasks();
 
-        if (tasks.length === 0) {
-            renderState("empty-data");
-            return;
-        }
+//         if (tasks.length === 0) {
+//             renderState("empty-data");
+//             return;
+//         }
 
-        renderState("success");
-        updateView();
+//         renderState("success");
+//         updateView();
 
-    } catch (error) {
-        console.error(error);
+//     } catch (error) {
+//         console.error(error);
 
-        renderState("error");
-    }
-}
+//         renderState("error");
+//     }
+// }
 
-loadTasks();
+// loadTasks();
 
 // console.log(tasks);
 
@@ -63,7 +64,7 @@ const deadlineField = form.querySelector("#deadline-field");
 const deadlineInput = form.querySelector("#task-deadline");
 
 // show/hide the deadline field when "Urgent" is selected
-function toggleDeadlineField() {
+export function toggleDeadlineField() {
     const isUrgent = prioritySelect.value === "urgent";
     deadlineField.hidden = !isUrgent;
     deadlineInput.required = isUrgent;
@@ -75,92 +76,19 @@ function toggleDeadlineField() {
 prioritySelect.addEventListener("change", toggleDeadlineField);
 toggleDeadlineField();
 
-form.addEventListener("submit", event => {
-    event.preventDefault();
-
-    const title = form.querySelector('#task-name').value;
-    const status = form.querySelector("#task-status").value;
-    const selectedPriority = prioritySelect.value;
-
-    let task;
-
-    if (selectedPriority === "urgent") {
-        const deadline = deadlineInput.value;
-        task = new UrgentTask(title, status, deadline);
-    } else {
-        task = new Task(title, status, selectedPriority);
-    }
-
-    createTask(tasks, task);
-
-    form.reset();
-    toggleDeadlineField();
-})
+setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput);
 
 
 // delete task & edit task
 const taskBoard = document.querySelector(".task-board");
-taskBoard.addEventListener("click", (event) => {
-    const deleteButton = event.target.closest(".delete-task");
-    const editButton = event.target.closest(".edit-task");
-    
-    if (deleteButton) {
-        const card = deleteButton.closest(".task-card");
-        const id = card.getAttribute("data-task-id");
-        deleteTask(tasks, id);
-    }
-
-    if (editButton) {
-        const card = editButton.closest(".task-card");
-        const id = card.dataset.taskId;
-        const task = findTask(tasks, id);
-        showEditForm(task);
-    }
-});
-
-// status change
-taskBoard.addEventListener("change", (event) => {
-    if (event.target.classList.contains("task-status")) {
-        const card = event.target.closest(".task-card");
-        const id = card.dataset.taskId;
-        const newStatus = event.target.value;
-        changeTaskStatus(tasks, id, newStatus);
-    }
-});
+setupTaskBoard(taskBoard, tasks)
 
 
 //edit task
-document.addEventListener("submit", event => {
-    const editForm = event.target.closest(".edit-form");
-    if (!editForm) {
-        return;
-    }
-    event.preventDefault();
 
-    const form = event.target;
-    const id = form.dataset.taskId;
+setupEditForm(tasks);
 
-    const title = form.querySelector('#edit-task-name').value;
-    const status = form.querySelector("#edit-task-status").value;
-    const priority = form.querySelector("#edit-task-priority").value;
-
-    updateTask(tasks, id, { title, status, priority });
-});
-
-
-// search
-searchInput.addEventListener("input", () => {
-    updateView();
-});
-
-
-// fillter
-statusFilter.addEventListener("change", updateView);
-priorityFilter.addEventListener("change", updateView);
-
-
-
-function updateView() {
+export function updateView() {
     saveUIState({
         search: searchInput.value,
         status: statusFilter.value,

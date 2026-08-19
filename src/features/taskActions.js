@@ -25,7 +25,7 @@ export function deleteTask(tasks, taskId) {
     } catch (error) {
         renderState("error");
     }
-}
+};
 
 // Find a task by ID
 
@@ -34,7 +34,7 @@ export function findTask(tasks, taskId) {
 }
 
 // Update task properties (title, status, priority)
-export function updateTask(tasks, taskId, updates) {
+export function updateTask(tasks, taskId, updates, form) {
     const task = findTask(tasks, taskId);
     if (!task) return;
 
@@ -52,8 +52,12 @@ export function updateTask(tasks, taskId, updates) {
         addCard(task);
     } catch (error) {
         renderState("error");
-    }
-}
+    } finally {
+        // Clear the form after updating
+        if (form) {
+            form.remove();
+        }
+}}
 
 // Change task status and move card to correct column
 export function changeTaskStatus(tasks, taskId, newStatus) {
@@ -72,4 +76,23 @@ export function changeTaskStatus(tasks, taskId, newStatus) {
     } catch (error) {
         renderState("error");
     }
+}
+
+export function setupEdit() {
+    document.addEventListener("submit", event => {
+        const editForm = event.target.closest(".edit-form");
+        if (!editForm) {
+            return;
+        }
+        event.preventDefault();
+    
+        const form = event.target;
+        const id = form.dataset.taskId;
+    
+        const title = form.querySelector('#edit-task-name').value;
+        const status = form.querySelector("#edit-task-status").value;
+        const priority = form.querySelector("#edit-task-priority").value;
+    
+        updateTask(tasks, id, { title, status, priority }, form);
+    });
 }
