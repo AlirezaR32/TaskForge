@@ -1,4 +1,4 @@
-function getTaskStates() {
+export function getTaskStates() {
     return {
         total: tasks.length,
         todo: tasks.filter((task) => task.status == 'todo').length,
@@ -8,9 +8,8 @@ function getTaskStates() {
         highPriority: tasks.filter((task) => task.priority === "high").length
     }
 }
-console.log(getTaskStates());
 
-function getTaskByStates(tasks) {
+export function getTaskByStates(tasks) {
     return tasks.reduce((stats, task) => {
         stats[task.status]++;
         return stats
@@ -21,4 +20,3 @@ function getTaskByStates(tasks) {
     });
 }
 
-console.log(getTaskByStates(tasks));

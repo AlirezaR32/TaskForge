@@ -1,7 +1,7 @@
 // search 
 
 export function matchesSearch(task, query) {
-    return task.title.toLowerCase().includes(query);
+    return task.title.toLowerCase().includes(query.toLowerCase());
 }
 
 // fillter

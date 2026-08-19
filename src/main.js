@@ -4,9 +4,9 @@ import { saveTasks, getTasks } from "./services/storage.js";
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
 import { matchesFilters, matchesSearch, getFilteredTasks } from "./features/taskFilters.js";
 import { renderTasks } from "./ui/taskView.js";
-import { fetchTasks } from "./api/taskApi.js"
-import { renderState } from "./ui/stateView.js";        
-
+import { fetchTasks } from "./api/taskApi.js";
+import { renderState } from "./ui/stateView.js";
+import { createTask, deleteTask, findTask, updateTask, changeTaskStatus } from "./features/taskActions.js";
 
 // render task
 let tasks = [];
@@ -91,78 +91,47 @@ form.addEventListener("submit", event => {
         task = new Task(title, status, selectedPriority);
     }
 
-    try {
-        tasks.push(task);
-        saveTasks(tasks);
-        addCard(task);
-    } catch (error) {
-        renderState("error");
-    }
+    createTask(tasks, task);
 
     form.reset();
     toggleDeadlineField();
 })
 
 
-// delete task
+// delete task & edit task
 const taskBoard = document.querySelector(".task-board");
 taskBoard.addEventListener("click", (event) => {
     const deleteButton = event.target.closest(".delete-task");
     const editButton = event.target.closest(".edit-task");
+    
     if (deleteButton) {
         const card = deleteButton.closest(".task-card");
-
         const id = card.getAttribute("data-task-id");
-
-
-        try {
-            tasks = tasks.filter(task => task.id !== id);
-            saveTasks(tasks);
-            card.remove();
-        } catch (error) {
-            renderState("error");
-        }
+        deleteTask(tasks, id);
     }
 
     if (editButton) {
         const card = editButton.closest(".task-card");
-
-        const id = card.dataset.taskId
-
-        const task = tasks.find((task) => task.id === id)
-        showEditForm(task)
+        const id = card.dataset.taskId;
+        const task = findTask(tasks, id);
+        showEditForm(task);
     }
-
-})
+});
 
 // status change
 taskBoard.addEventListener("change", (event) => {
-
     if (event.target.classList.contains("task-status")) {
         const card = event.target.closest(".task-card");
-
-        const id = card.dataset.taskId
-
-        const task = tasks.find((task) => task.id === id)
-
-        if (!task) return;
-
-        try {
-            task.changeStatus(event.target.value);
-            saveTasks(tasks);
-            card.remove();
-            addCard(task);
-        } catch (error) {
-            renderState("error");
-        }
-
+        const id = card.dataset.taskId;
+        const newStatus = event.target.value;
+        changeTaskStatus(tasks, id, newStatus);
     }
-})
+});
 
 
 //edit task
 document.addEventListener("submit", event => {
-    const editForm = event.target.closest(".edit-form")
+    const editForm = event.target.closest(".edit-form");
     if (!editForm) {
         return;
     }
@@ -171,31 +140,11 @@ document.addEventListener("submit", event => {
     const form = event.target;
     const id = form.dataset.taskId;
 
-    const task = tasks.find((task) => task.id === id);
-    if (!task) return;
-
     const title = form.querySelector('#edit-task-name').value;
     const status = form.querySelector("#edit-task-status").value;
     const priority = form.querySelector("#edit-task-priority").value;
 
-
-    task.title = title;
-    task.status = status;
-    task.priority = priority;
-
-
-
-    try {
-        saveTasks(tasks);
-
-        const card = document.querySelector(`[data-task-id="${id}"]`);
-        card.remove()
-        addCard(task);
-        form.remove();
-    } catch (error) {
-        renderState("error");
-    }
-
+    updateTask(tasks, id, { title, status, priority });
 });
 
 
