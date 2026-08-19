@@ -10,7 +10,7 @@ export function renderState(state) {
             break;
 
         case "empty-result":
-            appState.state.textContent = "No tasks match your filters.";
+            appState.textContent = "No tasks match your filters.";
             break;
 
         case "error":

@@ -1,6 +1,3 @@
-import { renderState } from "./stateView.js";
-
-
 export function renderTasks(taskList) {
     const taskLists = document.querySelectorAll(".task-list");
 
@@ -8,9 +5,6 @@ export function renderTasks(taskList) {
         taskList.innerHTML = "";
     })
 
-    if (taskLists.length === 0) {
-        renderState("empty-results");
-    }
     taskList.forEach(task => {
         addCard(task);
     });

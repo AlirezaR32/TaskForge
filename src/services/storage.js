@@ -22,7 +22,9 @@ export function getTasks() {
         const parsed = JSON.parse(data);
         return parsed.map(rehydrateTask);
     } catch (error) {
-        throw new Error("Failed to load tasks:", error);
+        throw new Error("Failed to load tasks", {
+            cause: error
+        });
     }
 }
 
