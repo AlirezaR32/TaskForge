@@ -7,7 +7,7 @@ import { renderTasks } from "./ui/taskView.js";
 import { fetchTasks } from "./api/taskApi.js";
 import { renderState } from "./ui/stateView.js";
 import { createTask, deleteTask, findTask, updateTask, changeTaskStatus } from "./features/taskActions.js";
-import { setupAddTask, setupEditForm, setupTaskBoard } from "./features/taskEvents.js";
+import { setupAddTask, setupEditForm, setupFilters, setupTaskBoard } from "./features/taskEvents.js";
 
 // render task
 let tasks = [];
@@ -81,12 +81,17 @@ setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput);
 
 // delete task & edit task
 const taskBoard = document.querySelector(".task-board");
-setupTaskBoard(taskBoard, tasks)
+setupTaskBoard(taskBoard, tasks);
 
 
 //edit task
-
 setupEditForm(tasks);
+
+setupFilters(
+    searchInput,
+    statusFilter,
+    priorityFilter
+);
 
 export function updateView() {
     saveUIState({

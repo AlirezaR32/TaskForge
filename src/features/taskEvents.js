@@ -1,30 +1,26 @@
-import { findTask,deleteTask, createTask, changeTaskStatus, updateTask } from "./taskActions.js";
+import { findTask, deleteTask, createTask, changeTaskStatus, updateTask } from "./taskActions.js";
 import { showEditForm } from "../ui/taskView.js";
 import { toggleDeadlineField, updateView } from "../main.js";
-import {Task, UrgentTask} from "../model/task.js";
+import { Task, UrgentTask } from "../model/task.js";
 
-export function setupTaskBoard(
-    taskBoard,
-    tasks,
-
-) {
+export function setupTaskBoard(taskBoard, tasks) {
     taskBoard.addEventListener("click", (event) => {
-    const deleteButton = event.target.closest(".delete-task");
-    const editButton = event.target.closest(".edit-task");
-    
-    if (deleteButton) {
-        const card = deleteButton.closest(".task-card");
-        const id = card.getAttribute("data-task-id");
-        deleteTask(tasks, id);
-    }
+        const deleteButton = event.target.closest(".delete-task");
+        const editButton = event.target.closest(".edit-task");
 
-    if (editButton) {
-        const card = editButton.closest(".task-card");
-        const id = card.dataset.taskId;
-        const task = findTask(tasks, id);
-        showEditForm(task);
-    }
-    
+        if (deleteButton) {
+            const card = deleteButton.closest(".task-card");
+            const id = card.getAttribute("data-task-id");
+            deleteTask(tasks, id);
+        }
+
+        if (editButton) {
+            const card = editButton.closest(".task-card");
+            const id = card.dataset.taskId;
+            const task = findTask(tasks, id);
+            showEditForm(task);
+        }
+    })
     // status change
     taskBoard.addEventListener("change", (event) => {
         if (event.target.classList.contains("task-status")) {
@@ -34,29 +30,29 @@ export function setupTaskBoard(
             changeTaskStatus(tasks, id, newStatus);
         }
     });
-});
-}
+};
+
 
 export function setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput) {
-    
+
     form.addEventListener("submit", event => {
         event.preventDefault();
-    
+
         const title = form.querySelector('#task-name').value;
         const status = form.querySelector("#task-status").value;
         const selectedPriority = prioritySelect.value;
-    
+
         let task;
-    
+
         if (selectedPriority === "urgent") {
             const deadline = deadlineInput.value;
             task = new UrgentTask(title, status, deadline);
         } else {
             task = new Task(title, status, selectedPriority);
         }
-    
+
         createTask(tasks, task);
-    
+
         form.reset();
         toggleDeadlineField();
     })
@@ -66,15 +62,13 @@ export function setupFilters(searchInput,
     priorityFilter
 ) {
     // search
-    searchInput.addEventListener("input", () => {
-        updateView
-    });
-    
-    
+    searchInput.addEventListener("input", updateView);
+
+
     // fillter
     statusFilter.addEventListener("change", updateView);
     priorityFilter.addEventListener("change", updateView);
-    
+
 }
 
 
