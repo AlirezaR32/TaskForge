@@ -1,14 +1,10 @@
-import { Task, UrgentTask } from "./model/task.js";
-import { addCard, showEditForm } from "./ui/taskView.js";
-import { saveTasks, getTasks } from "./services/storage.js";
+
+import { getTasks } from "./services/storage.js";
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
-import { matchesFilters, matchesSearch, getFilteredTasks } from "./features/taskFilters.js";
+import { getFilteredTasks } from "./features/taskFilters.js";
 import { renderTasks } from "./ui/taskView.js";
-import { fetchTasks } from "./api/taskApi.js";
-import { renderState } from "./ui/stateView.js";
-import { createTask, deleteTask, findTask, updateTask, changeTaskStatus } from "./features/taskActions.js";
 import { setupAddTask, setupEditForm, setupTaskBoard } from "./features/taskEvents.js";
-console.log('salam')
+
 // render task
 let tasks = [];
 tasks = getTasks();
@@ -106,9 +102,7 @@ export function updateView() {
 const openBtn = document.querySelector("#open-task-modal");
 const modal = document.querySelector("#task-modal");
 
-console.log('salam')
 openBtn.addEventListener("click",()=>{
-    console.log('salam')
     modal.classList.remove("hidden");
     modal.classList.add("flex");
 });
