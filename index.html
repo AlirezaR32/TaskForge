@@ -10,10 +10,9 @@
 
 <body class="bg-gray-100 text-gray-800 font-bold-md min-h-screen">
 
-    <main class="flex-1 flex flex-col min-w-0">
+    <main class="flex-1 flex flex-col min-w-0 ">
         <!-- Top Application Bar -->
-        <header
-            class="fixed bg-gray-50 top-0 w-full justify-between flex items-center border-b  h-16 flat no shadow px-4">
+        <header class="sticky top-0 z-20 h-16 bg-white border-b flex items-center justify-between px-6 no shadows">
             <div class="flex items-center">
                 <span class="font-headline-md text-headline-md font-bold text-primary">TaskForge</span>
             </div>
@@ -26,10 +25,9 @@
                     id="search" name="search" type="search" placeholder="Search tasks, projects...">
 
             </div>
-            </nav>
         </header>
         <!-- Dashboard Header & Filters -->
-        <div class="pt-20 pb-md px-margin-desktop">
+        <div class="pt-5 pb-md px-margin-desktop">
             <div class=" flex justify-between items-center">
                 <div>
                     <h1
@@ -67,7 +65,7 @@
         </div>
         <div id="app-state"></div>
         <!-- Kanban Board -->
-        <div class="task-board flex justify-between gap-md pb-md h-[calc(100vh-220px)]">
+        <div class=" max-w-5xl  task-board flex justify-center gap-md pb-md h-[calc(100vh-220px)]">
             <section
                 class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="todo">
@@ -95,7 +93,8 @@
 
                 </div>
                 <div class=" flex-1 p-sm flex flex-col gap-sm overflow-y-auto">
-                    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-[12px] shadow-[0_4px_6px_rgba(15,23,42,0.05)] hover:border-secondary transition-colors cursor-grab relative overflow-hidden ">
+                    <div
+                        class="bg-surface-container-lowest border border-outline-variant rounded-lg p-[12px] shadow-[0_4px_6px_rgba(15,23,42,0.05)] hover:border-secondary transition-colors cursor-grab relative overflow-hidden ">
                         <div class="absolute top-0 left-0 w-full h-[2px] bg-error"></div>
                         <div class="flex justify-between items-start mb-sm mt-unit">
                             <span
@@ -108,8 +107,10 @@
 
 
                         <div class="flex gap-2 justify-end">
-                            <button class="p-1 rounded-lg border border-outline-variant">Edit</button>
-                            <button class="bg-red-800 p-1 rounded-lg text-gray-100 * border border-on-surface-variant ">Delete</button>
+                            <button class="px-2 py-1 rounded-lg border hover:bg-gray-100 transition">Edit</button>
+                            <button
+                                class="px-2 py-1 rounded-lg text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition">Delete</button>
+
                         </div>
                     </div>
                 </div>
@@ -129,6 +130,10 @@
                 <div class="task-list"></div>
             </section>
         </div>
+        <button id="open-task-modal"
+            class="mt-auto mb-lg w-full bg-primary text-on-primary font-body-md font-bold py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">
+            Add Task
+        </button>
         <div class="input-box">
             <form id="task-form">
 
@@ -157,8 +162,51 @@
                     <input type="datetime-local" id="task-deadline" name="deadline">
                 </div>
 
-                <button type="submit" id="add-task-btn">Add Task</button>
+                <button type="submit" id="add-task-btn">AddTask</button>
 
+
+            </form>
+
+        </div>
+        <div id="task-modal" class="hidden fixed flex inset-0 bg-black/50  justify-center items-center">
+
+            <form id="task-form" class="bg-white rounded-xl p-6 w-[50%]  h-[50%] flex flex-col ">
+                <h2 class="font-headline-lg font-bold">
+                    Create Task
+                </h2>
+                <label for="task-name ">Task Name</label>
+                <input type="text" id="task-name" class="border rounded-lg p-2 w-full mb-4" name="taskName"
+                    placeholder="What needs to be done?" required>
+                <label for="task-name">info</label>
+                <input type="text" id="task-name" class="border rounded-lg p-2 w-full h-full mb-4" name="taskName" placeholder="">
+
+                <div class="flex gap-3 mt-auto items-center px-2">
+                    <div>
+                        <label for="task-status">Status:</label>
+                    <select name="status" id="task-status">
+                        <option value="todo">TODO</option>
+                        <option value="doing">DOING</option>
+                        <option value="done">DONE</option>
+                    </select>
+                    </div>
+
+                    <div>
+                        <label for="task-priority">Priority:</label>
+                    <select name="priority" id="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                    </div>
+
+                    <div id="deadline-field" class="deadline-field" hidden>
+                        <label for="task-deadline">Deadline</label>
+                        <input type="datetime-local" id="task-deadline" name="deadline">
+                    </div>
+
+                    <button type="submit" id="open-task-modal" class="relative ml-auto mt-auto  bg-primary text-on-primary font-body-md  py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">Add Task</button>
+                </div>
 
             </form>
         </div>

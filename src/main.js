@@ -8,7 +8,7 @@ import { fetchTasks } from "./api/taskApi.js";
 import { renderState } from "./ui/stateView.js";
 import { createTask, deleteTask, findTask, updateTask, changeTaskStatus } from "./features/taskActions.js";
 import { setupAddTask, setupEditForm, setupTaskBoard } from "./features/taskEvents.js";
-
+console.log('salam')
 // render task
 let tasks = [];
 tasks = getTasks();
@@ -102,3 +102,22 @@ export function updateView() {
     );
     renderTasks(filteredTasks);
 }
+
+const openBtn = document.querySelector("#open-task-modal");
+const modal = document.querySelector("#task-modal");
+
+console.log('salam')
+openBtn.addEventListener("click",()=>{
+    console.log('salam')
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+});
+
+
+modal.addEventListener("click",(e)=>{
+
+ if(e.target === modal){
+    modal.classList.add("hidden");
+ }
+
+});
