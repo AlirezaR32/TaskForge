@@ -8,46 +8,124 @@
     <link rel="stylesheet" href="src/style.css">
 </head>
 
-<body>
-    <header>
-        <nav class="navbar">
-            <h1 class="text-4xl font-bold text-center">TaskForge</h1>
-            <div class="search-box">
-                <form>
-                    <label for="search">Search</label>
-                    <input id="search" name="search" type="search" placeholder="Search tasks...">
-                    <div class="filters">
-                        <select id="status-filter">
+<body class="bg-gray-100 text-gray-800 font-bold-md min-h-screen">
+
+    <main class="flex-1 flex flex-col min-w-0">
+        <!-- Top Application Bar -->
+        <header
+            class="fixed bg-gray-50 top-0 w-full justify-between flex items-center border-b  h-16 flat no shadow px-4">
+            <div class="flex items-center">
+                <span class="font-headline-md text-headline-md font-bold text-primary">TaskForge</span>
+            </div>
+            <!-- Search Bar -->
+            <div class="search-box hidden md:flex  flex-1 max-w-2xl mx-auto relative items-center">
+                <span class="material-symbols-outlined absolute left-sm text-on-surface-variant"
+                    data-icon="search">🔎</span>
+                <input
+                    class="pl-xl pr-lg py-2 border rounded-lg  focus:outline-none focus:ring-2 font-body-sm transition-shadow shadow-sm w-full  bg-surface-container-lowest  border-outline-variant  "
+                    id="search" name="search" type="search" placeholder="Search tasks, projects...">
+
+            </div>
+            </nav>
+        </header>
+        <!-- Dashboard Header & Filters -->
+        <div class="pt-20 pb-md px-margin-desktop">
+            <div class=" flex justify-between items-center">
+                <div>
+                    <h1
+                        class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface font-bold tracking-tight">
+                        Project Board</h1>
+                    <p class="font-body-md text-body-md">Manage tasks and track progress for active sprint.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <div
+                        class="p-1 flex items-center gap-unit bg-surface-container-low border border-outline-variant rounded-lg">
+                        <span class="font-body-sm text-body-sm text-on-surface-variant pl-sm font-medium">Status:</span>
+                        <select id="status-filter"
+                            class="bg-transparent border-none font-body-sm text-body-sm text-on-surface py-1 pr-xl pl-2 focus:ring-0 cursor-pointer">
                             <option value="all">All Status</option>
                             <option value="todo">TODO</option>
                             <option value="doing">DOING</option>
                             <option value="done">DONE</option>
                         </select>
+                    </div>
 
-                        <select id="priority-filter">
+                    <div
+                        class="p-1 flex items-center gap-unit bg-surface-container-low border border-outline-variant rounded-lg">
+                        <span
+                            class="font-body-sm text-body-sm text-on-surface-variant pl-sm font-medium">Priority:</span>
+                        <select id="priority-filter"
+                            class="bg-transparent border-none font-body-sm text-body-sm text-on-surface py-1 pr-xl pl-2 focus:ring-0 cursor-pointer">
                             <option value="all">All Priority</option>
                             <option value="low">LOW</option>
                             <option value="medium">MEDIUM</option>
                             <option value="high">HIGH</option>
                         </select>
                     </div>
-                </form>
+                </div>
             </div>
-        </nav>
-    </header>
-    <main>
+        </div>
         <div id="app-state"></div>
-        <div class="task-board">
-            <section class="task-column" data-status="todo">
-                <h2>TODO</h2>
+        <!-- Kanban Board -->
+        <div class="task-board flex justify-between gap-md pb-md h-[calc(100vh-220px)]">
+            <section
+                class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                data-status="todo">
+                <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
+                    <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
+                        <div class="w-2 h-2 rounded-full bg-outline"></div>
+                        To Do
+                    </h2>
+                    <span
+                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
+
+                </div>
                 <div class="task-list"></div>
             </section>
-            <section class="task-column" data-status="doing">
-                <h2>DOING</h2>
-                <div class="task-list"></div>
+            <section
+                class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                data-status="doing">
+                <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
+                    <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
+                        <div class="w-2 h-2 rounded-full bg-outline"></div>
+                        DOING
+                    </h2>
+                    <span
+                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
+
+                </div>
+                <div class=" flex-1 p-sm flex flex-col gap-sm overflow-y-auto">
+                    <div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-[12px] shadow-[0_4px_6px_rgba(15,23,42,0.05)] hover:border-secondary transition-colors cursor-grab relative overflow-hidden ">
+                        <div class="absolute top-0 left-0 w-full h-[2px] bg-error"></div>
+                        <div class="flex justify-between items-start mb-sm mt-unit">
+                            <span
+                                class="bg-error-container text-on-error-container font-label-code text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide">High</span>
+                        </div>
+                        <h3 class="font-body-md text-body-md font-semibold text-on-surface leading-tight mb-unit">
+                            Implement Auth Flow</h3>
+                        <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-md">Set up
+                            OAuth2 integration with Google and GitHub. Ensure session persistence.</p>
+
+
+                        <div class="flex gap-2 justify-end">
+                            <button class="p-1 rounded-lg border border-outline-variant">Edit</button>
+                            <button class="bg-red-800 p-1 rounded-lg text-gray-100 * border border-on-surface-variant ">Delete</button>
+                        </div>
+                    </div>
+                </div>
             </section>
-            <section class="task-column" data-status="done">
-                <h2>DONE</h2>
+            <section
+                class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                data-status="done">
+                <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
+                    <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
+                        <div class="w-2 h-2 rounded-full bg-outline"></div>
+                        DONE
+                    </h2>
+                    <span
+                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
+
+                </div>
                 <div class="task-list"></div>
             </section>
         </div>
