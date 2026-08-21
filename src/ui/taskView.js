@@ -11,55 +11,150 @@ export function renderTasks(taskList) {
 }
 
 export function renderTaskCard(task) {
+
     const card = document.createElement("article");
-    card.classList.add("task-card");
-    card.setAttribute("data-task-id", task.id);
+
+    card.className = `
+        task-card
+        bg-white
+        border
+        rounded-lg
+        p-3
+        shadow-sm
+        hover:border-blue-500
+        transition
+        cursor-grab
+        relative
+        overflow-hidden
+    `;
+
+    card.dataset.taskId = task.id;
+
+
+    // priority line
+    const priorityLine = document.createElement("div");
+
+    priorityLine.className = `
+        absolute
+        top-0
+        left-0
+        w-full
+        h-[2px]
+        bg-red-500
+    `;
+
+
+    // priority badge
+    const priority = document.createElement("span");
+
+    priority.className = `
+        bg-red-100
+        text-red-700
+        text-xs
+        px-2
+        py-1
+        rounded
+        font-bold
+        uppercase
+    `;
+
+    priority.textContent = task.priority;
+
+
+
+    // title
 
     const title = document.createElement("h3");
+
+    title.className = `
+        text-sm
+        font-semibold
+        text-gray-800
+        mt-4
+        mb-2
+    `;
+
     title.textContent = task.title;
 
-    const isUrgent = task.deadline !== undefined && task.deadline !== null;
-    if (isUrgent) {
-        card.classList.add("urgent-task");
-    }
 
-    const priority = document.createElement('span');
-    priority.classList.add("task-priority-badge");
-    priority.textContent = isUrgent ? "URGENT" : task.priority;
 
-    if (isUrgent && task.deadline) {
-        const deadline = document.createElement("span");
-        deadline.classList.add("task-deadline");
-        const formatted = formatDeadline(task.deadline);
-        deadline.textContent = `⏰ ${formatted}`;
-        card.append(deadline);
-    }
+    // description (اگر مدل داری)
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    deleteButton.classList.add("delete-task");
+    const description = document.createElement("p");
+
+    description.className = `
+        text-xs
+        text-gray-500
+        mb-4
+    `;
+
+    description.textContent =
+        task.description ?? "";
+
+
+
+    // buttons container
+
+    const actions = document.createElement("div");
+
+    actions.className = `
+        flex
+        gap-2
+        justify-end
+    `;
+
+
 
     const editButton = document.createElement("button");
+
     editButton.textContent = "Edit";
+
+    editButton.className = `
+        px-3
+        py-1
+        rounded-lg
+        border
+        hover:bg-gray-100
+        transition
+    `;
+
     editButton.classList.add("edit-task");
 
-    const status = document.createElement("select");
-    status.classList.add("task-status");
-    const statuses = ["todo", "doing", "done"];
-    
-    statuses.forEach((s) => {
-        const option = document.createElement("option");
-        option.value = s;
-        option.textContent = s.toUpperCase();
 
-        if (s === task.status) {
-            option.selected = true;
-        }
 
-        status.append(option);
-    })
+    const deleteButton = document.createElement("button");
 
-    card.append(title, priority, status, deleteButton, editButton);
+    deleteButton.textContent = "Delete";
+
+    deleteButton.className = `
+        px-3
+        py-1
+        rounded-lg
+        bg-red-500
+        text-white
+        hover:bg-red-600
+        transition
+    `;
+
+    deleteButton.classList.add("delete-task");
+
+
+
+    actions.append(
+        editButton,
+        deleteButton
+    );
+
+
+    card.append(
+        priorityLine,
+        priority,
+        title,
+        description,
+        actions
+    );
+
+
     return card;
 }
 
@@ -75,10 +170,18 @@ function formatDeadline(deadline) {
 
 export function addCard(task) {
     const card = renderTaskCard(task);
+    console.log(task)
     const taskList = document.querySelector(
         `[data-status="${task.status}"] .task-list`
     );
-    taskList.append(card);
+    
+    if(taskList) {
+        taskList.append(card);
+    } else {
+        console.log(task)
+        console.log(task.status)
+        console.log(taskList);
+    }
 }
 
 export function renderEditForm(task) {
