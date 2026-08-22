@@ -54,7 +54,7 @@ export function setupAddTask(form, tasks, prioritySelect, deadlineField, deadlin
         } else {
             task = new Task(title, status, selectedPriority);
         }
-    
+        console.log(task)
         createTask(tasks, task);
     
         form.reset();

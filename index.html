@@ -78,7 +78,7 @@
                         class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
 
                 </div>
-                <div class="task-list"></div>
+                <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div>
             </section>
             <section
                 class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
@@ -92,7 +92,7 @@
                         class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
 
                 </div>
-                <!-- Task -->
+                <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div> <!-- Task -->
                 <!-- <div class=" flex-1 p-sm flex flex-col gap-sm overflow-y-auto">
                     <div
                         class="bg-surface-container-lowest border border-outline-variant rounded-lg p-[12px] shadow-[0_4px_6px_rgba(15,23,42,0.05)] hover:border-secondary transition-colors cursor-grab relative overflow-hidden ">
@@ -105,6 +105,26 @@
                             Implement Auth Flow</h3>
                         <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 mb-md">Set up
                             OAuth2 integration with Google and GitHub. Ensure session persistence.</p>
+
+
+                        <div class="flex gap-2 justify-end">
+                            <button class="px-2 py-1 rounded-lg border hover:bg-gray-100 transition">Edit</button>
+                            <button
+                                class="px-2 py-1 rounded-lg text-sm font-medium bg-red-500 text-white hover:bg-red-600 transition">Delete</button>
+
+                        </div>
+                    </div>
+                </div>
+                <div class=" flex-1 p-sm flex flex-col gap-sm overflow-y-auto w-full">
+                    <div
+                        class="bg-surface-container-lowest border border-outline-variant rounded-lg p-[12px] shadow-[0_4px_6px_rgba(15,23,42,0.05)] hover:border-secondary transition-colors cursor-grab relative overflow-hidden ">
+                        <div class="absolute top-0 left-0 w-full h-[2px] bg-error"></div>
+                        <div class="flex justify-between items-start mb-sm mt-unit">
+                            <span
+                                class="bg-error-container text-on-error-container font-label-code text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wide">High</span>
+                        </div>
+                        <h3 class="font-body-md text-body-md font-semibold text-on-surface leading-tight mb-unit">
+                            Iow</h3>
 
 
                         <div class="flex gap-2 justify-end">
@@ -128,7 +148,7 @@
                         class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
 
                 </div>
-                <div class="task-list"></div>
+                <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div>
             </section>
         </div>
         <button id="open-task-modal"
@@ -179,26 +199,27 @@
                 <input type="text" id="task-name" class="border rounded-lg p-2 w-full mb-4" name="taskName"
                     placeholder="What needs to be done?" required>
                 <label for="task-name">info</label>
-                <input type="text" id="task-name" class="border rounded-lg p-2 w-full h-full mb-4" name="taskName" placeholder="">
+                <input type="text" id="task-name" class="border rounded-lg p-2 w-full h-full mb-4" name="taskName"
+                    placeholder="">
 
                 <div class="flex gap-3 mt-auto items-center px-2">
                     <div>
                         <label for="task-status">Status:</label>
-                    <select name="status" id="task-status">
-                        <option value="todo">TODO</option>
-                        <option value="doing">DOING</option>
-                        <option value="done">DONE</option>
-                    </select>
+                        <select name="status" id="task-status">
+                            <option value="todo">TODO</option>
+                            <option value="doing">DOING</option>
+                            <option value="done">DONE</option>
+                        </select>
                     </div>
 
                     <div>
                         <label for="task-priority">Priority:</label>
-                    <select name="priority" id="task-priority">
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                        <option value="urgent">Urgent</option>
-                    </select>
+                        <select name="priority" id="task-priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
                     </div>
 
                     <div id="deadline-field" class="deadline-field" hidden>
@@ -206,7 +227,9 @@
                         <input type="datetime-local" id="task-deadline" name="deadline">
                     </div>
 
-                    <button type="submit" id="open-task-modal" class="relative ml-auto mt-auto  bg-primary text-on-primary font-body-md  py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">Add Task</button>
+                    <button type="submit" id="open-task-modal"
+                        class="relative ml-auto mt-auto  bg-primary text-on-primary font-body-md  py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">Add
+                        Task</button>
                 </div>
 
             </form>
