@@ -44,15 +44,16 @@ export function setupAddTask(form, tasks, prioritySelect, deadlineInput) {
     
         const title = form.querySelector('#task-name').value;
         const status = form.querySelector("#task-status").value;
+        const description = form.querySelector("#task-description").value;
         const selectedPriority = prioritySelect.value;
     
         let task;
     
         if (selectedPriority === "urgent") {
             const deadline = deadlineInput.value;
-            task = new UrgentTask(title, status, deadline);
+            task = new UrgentTask(title,description, status, deadline);
         } else {
-            task = new Task(title, status, selectedPriority);
+            task = new Task(title, description, status, selectedPriority);
         }
         console.log(task)
         createTask(tasks, task);

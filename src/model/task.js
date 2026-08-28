@@ -1,9 +1,10 @@
 export class Task{
     static counter = 0;
 
-    constructor(title, status="todo", priority){
+    constructor(title,description, status="todo", priority){
         this.id = String(Task.counter++);
         this.title = title;
+        this.description = description;
         this.status = status;
         this.priority = priority;    
         this.createdAt = new Date();  
@@ -17,8 +18,8 @@ export class Task{
 
 
 export class UrgentTask extends Task{
-    constructor(title, status, deadline){
-        super(title, status, "high");
+    constructor(title,description, status, deadline){
+        super(title,description, status, "high");
         this.deadline = deadline;
     }
 

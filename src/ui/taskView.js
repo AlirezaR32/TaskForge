@@ -27,6 +27,7 @@ export function renderTaskCard(task) {
         relative
         overflow-hidden
         w-full
+        shrink-0
     `;
 
     card.dataset.taskId = task.id;
