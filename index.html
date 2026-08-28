@@ -6,20 +6,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskForge</title>
     <link rel="stylesheet" href="src/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
-<body class="bg-gray-100 text-gray-800 font-bold-md min-h-screen">
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
 
-    <main class="flex-1 flex flex-col min-w-0 ">
+    <!-- Side Navigation Shell -->
+    <nav
+        class="hidden lg:flex flex-col h-screen sticky top-0 p-md bg-surface-container dark:bg-primary-container text-secondary dark:text-secondary-fixed font-body-sm text-body-sm left-0 w-64 border-r border-outline-variant dark:border-outline flat no shadows z-40 fixed">
+        <div class="mb-lg px-sm pt-sm flex flex-col gap-unit">
+            <div class="flex items-center gap-sm">
+                <div class="w-8 h-8 rounded bg-primary text-on-primary flex items-center justify-center font-bold">
+                    <span class="material-symbols-outlined text-[20px]" data-icon="task_alt">task_alt</span>
+                </div>
+                <span
+                    class="font-headline-sm text-headline-sm font-black text-on-surface dark:text-on-primary-container">TaskForge</span>
+            </div>
+        </div>
+        <div class="flex-grow flex flex-col gap-unit mt-md">
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg bg-secondary dark:bg-secondary-container text-on-secondary dark:text-on-secondary-container hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                <span class="">Dashboard</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-on-primary-container/70 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="checklist">checklist</span>
+                <span class="">My Tasks</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-on-primary-container/70 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                <span class="">Projects</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-on-primary-container/70 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="group">group</span>
+                <span class="">Team</span>
+            </a>
+        </div>
+        <button id="open-task-modal"
+            class="mt-auto mb-lg w-full bg-primary text-on-primary font-body-md font-bold py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm">
+            <span class="material-symbols-outlined" data-icon="add">add</span>
+            Add Task
+        </button>
+        <div class="flex flex-col gap-unit border-t border-outline-variant pt-md">
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-on-primary-container/70 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                <span class="">Settings</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant dark:text-on-primary-container/70 hover:bg-surface-container-highest dark:hover:bg-surface-variant transition-all hover:translate-x-1 duration-200"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                <span class="">Logout</span>
+            </a>
+        </div>
+    </nav>
+    <main class="flex-1 flex flex-col min-w-0">
         <!-- Top Application Bar -->
-        <header class="sticky top-0 z-20 h-16 bg-white border-b flex items-center justify-between px-6 no shadows">
+        <header
+            class="fixed top-0 w-full lg:w-[calc(100%-256px)] z-30 flex justify-between items-center px-margin-mobile lg:px-margin-desktop h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flat no shadows lg:static lg:border-none lg:bg-transparent">
             <div class="flex items-center">
                 <span class="font-headline-md text-headline-md font-bold text-primary">TaskForge</span>
             </div>
             <!-- Search Bar -->
             <div class="search-box hidden md:flex  flex-1 max-w-2xl mx-auto relative items-center">
                 <span class="material-symbols-outlined absolute left-sm text-on-surface-variant"
-                    data-icon="search">🔎</span>
+                    data-icon="search">search</span>
                 <input
                     class="pl-xl pr-lg py-2 border rounded-lg  focus:outline-none focus:ring-2 font-body-sm transition-shadow shadow-sm w-full  bg-surface-container-lowest  border-outline-variant  "
                     id="search" name="search" type="search" placeholder="Search tasks, projects...">
@@ -65,9 +119,9 @@
         </div>
         <div id="app-state"></div>
         <!-- Kanban Board -->
-        <div class=" max-w-5xl  task-board flex justify-center gap-md pb-md h-[calc(100vh-220px)]">
+        <div class="task-board flex justify-center gap-md pb-md h-[calc(100vh-220px)]">
             <section
-                class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                class="task-column w-100 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="todo">
                 <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
                     <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
@@ -81,7 +135,7 @@
                 <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div>
             </section>
             <section
-                class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                class="task-column w-100 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="doing">
                 <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
                     <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
@@ -137,7 +191,7 @@
                 </div> -->
             </section>
             <section
-                class="task-column w-80 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                class="task-column w-100 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="done">
                 <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
                     <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
@@ -151,10 +205,7 @@
                 <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div>
             </section>
         </div>
-        <button id="open-task-modal"
-            class="mt-auto mb-lg w-full bg-primary text-on-primary font-body-md font-bold py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">
-            Add Task
-        </button>
+
         <!-- <div class="input-box">
             <form id="task-form">
 
@@ -236,7 +287,7 @@
         </div>
     </main>
     <footer>
-        <p>TaskForge — Built with Vanilla JavaScript</p>
+
     </footer>
 
     <script type="module" src="src/main.js"></script>

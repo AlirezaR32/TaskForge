@@ -37,7 +37,7 @@ export function setupTaskBoard(
 });
 }
 
-export function setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput) {
+export function setupAddTask(form, tasks, prioritySelect, deadlineInput) {
     
     form.addEventListener("submit", event => {
         event.preventDefault();
