@@ -1,5 +1,5 @@
 import { findTask, deleteTask, createTask, changeTaskStatus, updateTask } from "./taskActions.js";
-import { showEditForm } from "../ui/taskView.js";
+import { openEditModal, showEditForm } from "../ui/taskView.js";
 import { toggleDeadlineField, updateView } from "../main.js";
 import { Task, UrgentTask } from "../model/task.js";
 
@@ -18,39 +18,40 @@ export function setupTaskBoard(taskBoard, tasks) {
             const card = editButton.closest(".task-card");
             const id = card.dataset.taskId;
             const task = findTask(tasks, id);
-            showEditForm(task);
+            openEditModal(task);
         }
+
+        // status change
+        taskBoard.addEventListener("change", (event) => {
+            if (event.target.classList.contains("task-status")) {
+                const card = event.target.closest(".task-card");
+                const id = card.dataset.taskId;
+                const newStatus = event.target.value;
+                changeTaskStatus(tasks, id, newStatus);
+            }
+        });
     })
-    // status change
-    taskBoard.addEventListener("change", (event) => {
-        if (event.target.classList.contains("task-status")) {
-            const card = event.target.closest(".task-card");
-            const id = card.dataset.taskId;
-            const newStatus = event.target.value;
-            changeTaskStatus(tasks, id, newStatus);
-        }
-    });
-};
+}
 
 
-export function setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput) {
+export function setupAddTask(form, tasks, prioritySelect, deadlineInput) {
 
     form.addEventListener("submit", event => {
         event.preventDefault();
 
         const title = form.querySelector('#task-name').value;
         const status = form.querySelector("#task-status").value;
+        const description = form.querySelector("#task-description").value;
         const selectedPriority = prioritySelect.value;
 
         let task;
 
         if (selectedPriority === "urgent") {
             const deadline = deadlineInput.value;
-            task = new UrgentTask(title, status, deadline);
+            task = new UrgentTask(title, description, status, deadline);
         } else {
-            task = new Task(title, status, selectedPriority);
+            task = new Task(title, description, status, selectedPriority);
         }
-
         createTask(tasks, task);
 
         form.reset();
@@ -74,13 +75,15 @@ export function setupFilters(searchInput,
 
 // Edit
 export function setupEditForm(tasks) {
+    console.log("start edit")
     document.addEventListener("submit", event => {
         const editForm = event.target.closest(".edit-form");
 
         if (!editForm) {
             return;
-        }
 
+        }
+        console.log("edit")
         event.preventDefault();
 
         const id = editForm.dataset.taskId;
