@@ -3,7 +3,7 @@ import { getUIState, saveUIState } from "./services/sessionStorage.js";
 import { getFilteredTasks } from "./features/taskFilters.js";
 import { renderTasks } from "./ui/taskView.js";
 import { getTasks, saveTasks } from "./services/storage.js";
-import { setupAddTask, setupTaskBoard } from "./features/taskEvents.js";
+import { setupAddTask, setupFilters, setupTaskBoard } from "./features/taskEvents.js";
 
 // render task
 let tasks = [];
@@ -134,8 +134,6 @@ setupFilters(
 );
 
 //edit task
-
-setupEditForm(tasks);
 
 export function updateView() {
     saveUIState({
