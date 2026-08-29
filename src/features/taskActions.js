@@ -1,6 +1,6 @@
 import { saveTasks, getTasks } from "../services/storage.js";
 import { renderState } from "../ui/stateView.js";
-import { addCard } from "../ui/taskView.js";
+import { addCard, renderTasks } from "../ui/taskView.js";
 
 // Create a new task and add it to the board
 export function createTask(tasks, task) {
@@ -78,21 +78,3 @@ export function changeTaskStatus(tasks, taskId, newStatus) {
     }
 }
 
-export function setupEdit() {
-    document.addEventListener("submit", event => {
-        const editForm = event.target.closest(".edit-form");
-        if (!editForm) {
-            return;
-        }
-        event.preventDefault();
-    
-        const form = event.target;
-        const id = form.dataset.taskId;
-    
-        const title = form.querySelector('#edit-task-name').value;
-        const status = form.querySelector("#edit-task-status").value;
-        const priority = form.querySelector("#edit-task-priority").value;
-    
-        updateTask(tasks, id, { title, status, priority }, form);
-    });
-}

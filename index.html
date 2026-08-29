@@ -10,6 +10,45 @@
 </head>
 
 <body class="bg-background text-on-background font-body-md min-h-screen flex">
+    <div id="mobile-nav-backdrop" class="fixed inset-0 z-30 hidden bg-black/40 lg:hidden"></div>
+
+    <!-- Mobile Navigation -->
+    <aside id="mobile-nav" aria-label="Mobile navigation"
+        class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full bg-surface-container text-secondary shadow-xl transition-transform duration-200 ease-in-out lg:hidden">
+        <div class="flex items-center justify-between border-b border-outline-variant px-md py-md">
+            <div class="flex items-center gap-sm">
+                <div class="w-8 h-8 rounded bg-primary text-on-primary flex items-center justify-center font-bold">
+                    <span class="material-symbols-outlined text-[20px]" data-icon="task_alt">task_alt</span>
+                </div>
+                <span class="font-headline-sm text-headline-sm font-black text-on-surface">TaskForge</span>
+            </div>
+            <button id="mobile-nav-close" type="button" aria-label="Close navigation"
+                class="rounded-full p-2 text-on-surface-variant hover:bg-surface-container-high transition-colors">
+                <span class="material-symbols-outlined" data-icon="close">close</span>
+            </button>
+        </div>
+        <nav class="flex flex-col gap-unit p-md">
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg bg-secondary text-on-secondary" href="#">
+                <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                <span>Dashboard</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="checklist">checklist</span>
+                <span>My Tasks</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                <span>Projects</span>
+            </a>
+            <a class="flex items-center gap-md px-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-highest"
+                href="#">
+                <span class="material-symbols-outlined" data-icon="group">group</span>
+                <span>Team</span>
+            </a>
+        </nav>
+    </aside>
 
     <!-- Side Navigation Shell -->
     <nav
@@ -67,7 +106,12 @@
         <!-- Top Application Bar -->
         <header
             class="fixed top-0 w-full lg:w-[calc(100%-256px)] z-30 flex justify-between items-center px-margin-mobile lg:px-margin-desktop h-16 bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline flat no shadows lg:static lg:border-none lg:bg-transparent">
-            <div class="flex items-center">
+            <div class="flex items-center gap-sm">
+                <button id="mobile-nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false"
+                    aria-controls="mobile-nav"
+                    class="lg:hidden inline-flex items-center justify-center rounded-lg border border-outline-variant bg-surface-container-low p-2 text-on-surface-variant">
+                    <span class="material-symbols-outlined" data-icon="menu">menu</span>
+                </button>
                 <span class="font-headline-md text-headline-md font-bold text-primary">TaskForge</span>
             </div>
             <!-- Search Bar -->
@@ -128,9 +172,10 @@
                         <div class="w-2 h-2 rounded-full bg-outline"></div>
                         To Do
                     </h2>
-                    <span
-                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
-
+                    <span id="todo-count"
+                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">
+                        0
+                    </span>
                 </div>
                 <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto min-h-0"></div>
             </section>
@@ -142,9 +187,10 @@
                         <div class="w-2 h-2 rounded-full bg-outline"></div>
                         DOING
                     </h2>
-                    <span
-                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
-
+                    <span id="doing-count"
+                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">
+                        0
+                    </span>
                 </div>
                 <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div> <!-- Task -->
                 <!-- <div class=" flex-1 p-sm flex flex-col gap-sm overflow-y-auto">
@@ -198,9 +244,10 @@
                         <div class="w-2 h-2 rounded-full bg-outline"></div>
                         DONE
                     </h2>
-                    <span
-                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">3</span>
-
+                    <span id="done-count"
+                        class="font-label-code text-label-code bg-surface-container text-on-surface-variant px-2 py-0.5 rounded">
+                        0
+                    </span>
                 </div>
                 <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto"></div>
             </section>
@@ -240,52 +287,145 @@
             </form>
 
         </div> -->
-        <div id="task-modal" class="hidden fixed  inset-0 bg-black/50  justify-center items-center">
 
-            <form id="task-form" class="bg-white rounded-xl p-6 w-[50%]  h-[50%] flex flex-col ">
-                <h2 class="font-headline-lg font-bold">
-                    Create Task
-                </h2>
-                <label for="task-name">Task Name</label>
-                <input type="text" id="task-name" class="border rounded-lg p-2 w-full mb-4" name="taskName"
-                    placeholder="What needs to be done?" required>
-                <label for="task-name">info</label>
-                <input type="text" id="task-description" class="border rounded-lg p-2 w-full h-full mb-4" name="task-description"
-                    placeholder="">
+    </main>
+    
+    <!-- Add task form -->
+    <div id="task-modal" class="hidden fixed  inset-0 z-51 bg-black/50 justify-center items-center">
 
-                <div class="flex gap-3 mt-auto items-center px-2">
-                    <div>
-                        <label for="task-status">Status:</label>
-                        <select name="status" id="task-status">
-                            <option value="todo">TODO</option>
-                            <option value="doing">DOING</option>
-                            <option value="done">DONE</option>
-                        </select>
-                    </div>
+        <form id="task-form" class="bg-white rounded-xl p-6 w-[50%]  h-[50%] flex flex-col ">
+            <h2 class="font-headline-lg font-bold">
+                Create Task
+            </h2>
+            <label for="task-name">Task Name</label>
+            <input type="text" id="task-name" class="border rounded-lg p-2 w-full mb-4" name="taskName"
+                placeholder="What needs to be done?" required>
+            <label for="task-name">info</label>
+            <input type="text" id="task-description" class="border rounded-lg p-2 w-full h-full mb-4"
+                name="task-description" placeholder="">
 
-                    <div>
-                        <label for="task-priority">Priority:</label>
-                        <select name="priority" id="task-priority">
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                            <option value="urgent">Urgent</option>
-                        </select>
-                    </div>
-
-                    <div id="deadline-field" class="deadline-field" hidden>
-                        <label for="task-deadline">Deadline</label>
-                        <input type="datetime-local" id="task-deadline" name="deadline">
-                    </div>
-
-                    <button type="submit" id="open-task-modal"
-                        class="relative ml-auto mt-auto  bg-primary text-on-primary font-body-md  py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">Add
-                        Task</button>
+            <div class="flex gap-3 mt-auto items-center px-2">
+                <div>
+                    <label for="task-status">Status:</label>
+                    <select name="status" id="task-status">
+                        <option value="todo">TODO</option>
+                        <option value="doing">DOING</option>
+                        <option value="done">DONE</option>
+                    </select>
                 </div>
 
-            </form>
-        </div>
-    </main>
+                <div>
+                    <label for="task-priority">Priority:</label>
+                    <select name="priority" id="task-priority">
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+
+                <div id="deadline-field" class="deadline-field" hidden>
+                    <label for="task-deadline">Deadline</label>
+                    <input type="datetime-local" id="task-deadline" name="deadline">
+                </div>
+
+                <button type="submit" id="submit-task-btn"
+                    class="relative ml-auto mt-auto  bg-primary text-on-primary font-body-md  py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">Add
+                    Task</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Edit form -->
+    <div id="edit-task-modal" class="hidden fixed inset-0 z-50 bg-black/50 justify-center items-center">
+
+        <form id="edit-task-form" class=" bg-white rounded-xl p-6 w-[50%] flex flex-col gap-4">
+
+            <div class="flex justify-between items-center">
+                <h2 class="font-headline-lg font-bold">
+                    Edit Task
+                </h2>
+
+                <button type="button" id="close-edit-modal" class="p-2 rounded-lg hover:bg-gray-100">
+
+                    <span class="material-symbols-outlined">
+                        close
+                    </span>
+
+                </button>
+            </div>
+
+            <input type="hidden" id="edit-task-id">
+
+            <div>
+                <label for="edit-task-name">
+                    Task Name
+                </label>
+
+                <input type="text" id="edit-task-name" name="taskName" class="border rounded-lg p-2 w-full" required>
+            </div>
+
+            <div>
+                <label for="edit-task-description">
+                    Description
+                </label>
+
+                <textarea id="edit-task-description" name="description"
+                    class="border rounded-lg p-2 w-full min-h-32"></textarea>
+            </div>
+
+            <div class="flex gap-4">
+
+                <div>
+                    <label for="edit-task-status">
+                        Status
+                    </label>
+
+                    <select id="edit-task-status" name="status" class="border rounded-lg p-2">
+
+                        <option value="todo">TODO</option>
+                        <option value="doing">DOING</option>
+                        <option value="done">DONE</option>
+
+                    </select>
+                </div>
+
+                <div>
+                    <label for="edit-task-priority">
+                        Priority
+                    </label>
+
+                    <select id="edit-task-priority" name="priority" class="border rounded-lg p-2">
+
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="flex justify-end gap-2 mt-4">
+
+                <button type="button" id="cancel-edit" class="px-4 py-2 rounded-lg border hover:bg-gray-100">
+
+                    Cancel
+
+                </button>
+
+                <button type="submit" id="edit-task-btn" class="px-4 py-2 rounded-lg bg-primary text-on-primary">
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+    </div>
     <footer>
 
     </footer>

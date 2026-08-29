@@ -1,13 +1,10 @@
 import { findTask,deleteTask, createTask, changeTaskStatus, updateTask } from "./taskActions.js";
-import { showEditForm } from "../ui/taskView.js";
+import { openEditModal, showEditForm } from "../ui/taskView.js";
 import { toggleDeadlineField, updateView } from "../main.js";
 import {Task, UrgentTask} from "../model/task.js";
 
-export function setupTaskBoard(
-    taskBoard,
-    tasks,
+export function setupTaskBoard(taskBoard, tasks) {
 
-) {
     taskBoard.addEventListener("click", (event) => {
     const deleteButton = event.target.closest(".delete-task");
     const editButton = event.target.closest(".edit-task");
@@ -22,7 +19,7 @@ export function setupTaskBoard(
         const card = editButton.closest(".task-card");
         const id = card.dataset.taskId;
         const task = findTask(tasks, id);
-        showEditForm(task);
+        openEditModal(task);
     }
     
     // status change
@@ -55,7 +52,6 @@ export function setupAddTask(form, tasks, prioritySelect, deadlineInput) {
         } else {
             task = new Task(title, description, status, selectedPriority);
         }
-        console.log(task)
         createTask(tasks, task);
     
         form.reset();
@@ -81,13 +77,15 @@ export function setupFilters(searchInput,
 
 // Edit
 export function setupEditForm(tasks) {
+    console.log("start edit")
     document.addEventListener("submit", event => {
         const editForm = event.target.closest(".edit-form");
 
         if (!editForm) {
             return;
+            
         }
-
+        console.log("edit")
         event.preventDefault();
 
         const id = editForm.dataset.taskId;
