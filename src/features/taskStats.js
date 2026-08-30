@@ -1,4 +1,4 @@
-export function getTaskStates() {
+export function getTaskStates(tasks) {
     return {
         total: tasks.length,
         todo: tasks.filter((task) => task.status == 'todo').length,

@@ -2,43 +2,13 @@
 import { getUIState, saveUIState } from "./services/sessionStorage.js";
 import { getFilteredTasks } from "./features/taskFilters.js";
 import { renderTasks } from "./ui/taskView.js";
+import { renderState } from "./ui/stateView.js";
 import { getTasks, saveTasks } from "./services/storage.js";
-import { setupAddTask, setupFilters, setupTaskBoard } from "./features/taskEvents.js";
+import { setupAddTask, setupTaskBoard, setupFilters } from "./features/taskEvents.js";
 
 // render task
 let tasks = [];
 tasks = getTasks();
-
-renderTasks(tasks);
-// console.log(tasks)
-
-// api
-// async function loadTasks() {
-//     renderState("loading");
-
-//     try {
-//         tasks = await fetchTasks();
-
-//         if (tasks.length === 0) {
-//             renderState("empty-data");
-//             return;
-//         }
-
-//         renderState("success");
-//         updateView();
-
-//     } catch (error) {
-//         console.error(error);
-
-//         renderState("error");
-//     }
-// }
-
-// loadTasks();
-
-// console.log(tasks);
-
-
 
 const uiState = getUIState();
 
@@ -80,12 +50,6 @@ if (mobileNavBackdrop) {
     mobileNavBackdrop.addEventListener("click", () => syncMobileNavState(false));
 }
 
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && uiState.mobileNavOpen) {
-        syncMobileNavState(false);
-    }
-});
-
 window.addEventListener("resize", () => {
     if (window.innerWidth >= 1024) {
         syncMobileNavState(false);
@@ -97,10 +61,8 @@ searchInput.value = uiState.search;
 statusFilter.value = uiState.status;
 syncMobileNavState(uiState.mobileNavOpen);
 
-updateView();
 
-
-//add task 
+//add task
 const form = document.querySelector("#task-form");
 const prioritySelect = form.querySelector("#task-priority");
 const deadlineField = form.querySelector("#deadline-field");
@@ -119,21 +81,66 @@ export function toggleDeadlineField() {
 prioritySelect.addEventListener("change", toggleDeadlineField);
 toggleDeadlineField();
 
-setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput);
+// ====================
+// Add Task Modal
+// ====================
+
+const openBtn = document.querySelector("#open-task-modal");
+const openBtnMobile = document.querySelector("#open-task-modal-mobile");
+const modal = document.querySelector("#task-modal");
+const closeTaskModalButton = document.querySelector("#close-task-modal");
+const taskFormError = document.querySelector("#task-form-error");
+
+function openTaskModal() {
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    syncMobileNavState(false);
+    form.querySelector("#task-name").focus();
+}
+
+function closeTaskModal() {
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    form.reset();
+    toggleDeadlineField();
+    if (taskFormError) {
+        taskFormError.textContent = "";
+        taskFormError.classList.add("hidden");
+    }
+}
+
+if (openBtn) {
+    openBtn.addEventListener("click", openTaskModal);
+}
+
+if (openBtnMobile) {
+    openBtnMobile.addEventListener("click", openTaskModal);
+}
+
+if (closeTaskModalButton) {
+    closeTaskModalButton.addEventListener("click", closeTaskModal);
+}
+
+modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        closeTaskModal();
+    }
+});
+
+setupAddTask(form, tasks, prioritySelect, deadlineField, deadlineInput, modal);
 
 
 // delete task & edit task
 const taskBoard = document.querySelector(".task-board");
-setupTaskBoard(taskBoard, tasks);
+setupTaskBoard(taskBoard, tasks)
+
+// wire up search / status / priority filters
+setupFilters(searchInput, statusFilter, priorityFilter);
 
 
-setupFilters(
-    searchInput,
-    statusFilter,
-    priorityFilter
-);
-
-//edit task
+// ====================
+// Board rendering
+// ====================
 
 export function updateView() {
     saveUIState({
@@ -148,27 +155,21 @@ export function updateView() {
         priorityFilter.value
     );
     renderTasks(filteredTasks);
+
+    if (filteredTasks.length === 0) {
+        renderState(tasks.length === 0 ? "empty-data" : "empty-result");
+    } else {
+        renderState(null);
+    }
 }
 
-const openBtn = document.querySelector("#open-task-modal");
-const modal = document.querySelector("#task-modal");
-
-openBtn.addEventListener("click",()=>{
-    modal.classList.remove("hidden");
-    modal.classList.add("flex");
-});
+updateView();
 
 
-modal.addEventListener("click",(e)=>{
-
- if(e.target === modal){
-    modal.classList.add("hidden");
- }
-
-});
-
-
+// ====================
 // Edit Task Modal
+// ====================
+
 const editModal = document.querySelector("#edit-task-modal");
 const editForm = document.querySelector("#edit-task-form");
 
@@ -199,7 +200,6 @@ editModal.addEventListener("click", (event) => {
 
 // Submit edit
 editForm.addEventListener("submit", (event) => {
-    console.log(editForm)
 
     event.preventDefault();
 
@@ -231,3 +231,16 @@ function closeEditModal() {
 
     editForm.reset();
 }
+
+// Escape key closes whichever overlay is currently open
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+
+    if (!editModal.classList.contains("hidden")) {
+        closeEditModal();
+    } else if (!modal.classList.contains("hidden")) {
+        closeTaskModal();
+    } else if (uiState.mobileNavOpen) {
+        syncMobileNavState(false);
+    }
+});

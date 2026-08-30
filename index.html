@@ -12,6 +12,12 @@
 <body class="bg-background text-on-background font-body-md min-h-screen flex">
     <div id="mobile-nav-backdrop" class="fixed inset-0 z-30 hidden bg-black/40 lg:hidden"></div>
 
+    <!-- Mobile Add Task FAB (sidebar's Add Task button is hidden on small screens) -->
+    <button id="open-task-modal-mobile" type="button" aria-label="Add task"
+        class="lg:hidden fixed bottom-5 right-5 z-40 w-14 h-14 rounded-full bg-primary text-on-primary shadow-lg flex items-center justify-center hover:scale-105 transition-transform">
+        <span class="material-symbols-outlined text-[28px]">add</span>
+    </button>
+
     <!-- Mobile Navigation -->
     <aside id="mobile-nav" aria-label="Mobile navigation"
         class="fixed inset-y-0 left-0 z-40 w-72 -translate-x-full bg-surface-container text-secondary shadow-xl transition-transform duration-200 ease-in-out lg:hidden">
@@ -125,7 +131,7 @@
             </div>
         </header>
         <!-- Dashboard Header & Filters -->
-        <div class="pt-5 pb-md px-margin-desktop">
+        <div class="pt-20 pb-md px-margin-mobile lg:pt-5 lg:px-margin-desktop">
             <div class=" flex justify-between items-center">
                 <div>
                     <h1
@@ -161,11 +167,14 @@
                 </div>
             </div>
         </div>
-        <div id="app-state"></div>
+        <div id="app-state"
+            class="hidden mx-margin-mobile lg:mx-margin-desktop mb-md rounded-lg border border-outline-variant bg-surface-container-low px-4 py-3 font-body-sm text-body-sm text-on-surface-variant">
+        </div>
         <!-- Kanban Board -->
-        <div class="task-board flex justify-center gap-md pb-md h-[calc(100vh-220px)]">
+        <div
+            class="task-board flex gap-md overflow-x-auto pb-md px-margin-mobile lg:px-margin-desktop h-[calc(100vh-220px)]">
             <section
-                class="task-column w-100 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                class="task-column min-w-[280px] flex-1 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="todo">
                 <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
                     <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
@@ -180,7 +189,7 @@
                 <div class="task-list w-full flex-1 p-2 flex flex-col gap-3 overflow-y-auto min-h-0"></div>
             </section>
             <section
-                class="task-column w-100 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                class="task-column min-w-[280px] flex-1 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="doing">
                 <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
                     <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
@@ -237,7 +246,7 @@
                 </div> -->
             </section>
             <section
-                class="task-column w-100 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
+                class="task-column min-w-[280px] flex-1 flex flex-col items-start  bg-surface-bright border border-outline-variant rounded-lg h-full max-h-full"
                 data-status="done">
                 <div class="flex items-center justify-between p-4 w-full border-b border-outline-variant">
                     <h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-sm">
@@ -291,23 +300,41 @@
     </main>
     
     <!-- Add task form -->
-    <div id="task-modal" class="hidden fixed  inset-0 z-51 bg-black/50 justify-center items-center">
+    <div id="task-modal" class="hidden fixed inset-0 z-50 bg-black/50 justify-center items-center p-4">
 
-        <form id="task-form" class="bg-white rounded-xl p-6 w-[50%]  h-[50%] flex flex-col ">
-            <h2 class="font-headline-lg font-bold">
-                Create Task
-            </h2>
-            <label for="task-name">Task Name</label>
-            <input type="text" id="task-name" class="border rounded-lg p-2 w-full mb-4" name="taskName"
-                placeholder="What needs to be done?" required>
-            <label for="task-name">info</label>
-            <input type="text" id="task-description" class="border rounded-lg p-2 w-full h-full mb-4"
-                name="task-description" placeholder="">
+        <form id="task-form"
+            class="bg-surface-container-lowest text-on-surface rounded-xl p-6 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-[32rem] max-h-[90vh] overflow-y-auto flex flex-col gap-3 shadow-xl">
+            <div class="flex items-center justify-between">
+                <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">
+                    Create Task
+                </h2>
+                <button type="button" id="close-task-modal" aria-label="Close"
+                    class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors size-10">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
 
-            <div class="flex gap-3 mt-auto items-center px-2">
+            <p id="task-form-error" class="hidden font-body-sm text-body-sm text-error bg-error-container/40 border border-error/30 rounded-lg px-3 py-2"></p>
+
+            <div>
+                <label for="task-name" class="font-body-sm text-body-sm font-medium text-on-surface-variant">Task Name</label>
+                <input type="text" id="task-name"
+                    class="border border-outline-variant rounded-lg p-2 w-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                    name="taskName" placeholder="What needs to be done?" required>
+            </div>
+
+            <div>
+                <label for="task-description" class="font-body-sm text-body-sm font-medium text-on-surface-variant">Description</label>
+                <textarea id="task-description"
+                    class="border border-outline-variant rounded-lg p-2 w-full min-h-24 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                    name="taskDescription" placeholder="Add more detail (optional)"></textarea>
+            </div>
+
+            <div class="flex flex-wrap gap-3 items-end pt-1">
                 <div>
-                    <label for="task-status">Status:</label>
-                    <select name="status" id="task-status">
+                    <label for="task-status" class="font-body-sm text-body-sm font-medium text-on-surface-variant block mb-1">Status</label>
+                    <select name="status" id="task-status"
+                        class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary">
                         <option value="todo">TODO</option>
                         <option value="doing">DOING</option>
                         <option value="done">DONE</option>
@@ -315,8 +342,9 @@
                 </div>
 
                 <div>
-                    <label for="task-priority">Priority:</label>
-                    <select name="priority" id="task-priority">
+                    <label for="task-priority" class="font-body-sm text-body-sm font-medium text-on-surface-variant block mb-1">Priority</label>
+                    <select name="priority" id="task-priority"
+                        class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary">
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
@@ -325,84 +353,84 @@
                 </div>
 
                 <div id="deadline-field" class="deadline-field" hidden>
-                    <label for="task-deadline">Deadline</label>
-                    <input type="datetime-local" id="task-deadline" name="deadline">
+                    <label for="task-deadline" class="font-body-sm text-body-sm font-medium text-on-surface-variant block mb-1">Deadline</label>
+                    <input type="datetime-local" id="task-deadline" name="deadline"
+                        class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary">
                 </div>
 
                 <button type="submit" id="submit-task-btn"
-                    class="relative ml-auto mt-auto  bg-primary text-on-primary font-body-md  py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm max-w-4xl">Add
-                    Task</button>
+                    class="relative ml-auto bg-primary text-on-primary font-body-md py-2 px-4 rounded-lg hover:scale-[0.98] transition-transform flex items-center justify-center gap-sm">
+                    Add Task</button>
             </div>
 
         </form>
     </div>
 
     <!-- Edit form -->
-    <div id="edit-task-modal" class="hidden fixed inset-0 z-50 bg-black/50 justify-center items-center">
+    <div id="edit-task-modal" class="hidden fixed inset-0 z-50 bg-black/50 justify-center items-center p-4">
 
-        <form id="edit-task-form" class=" bg-white rounded-xl p-6 w-[50%] flex flex-col gap-4">
+        <form id="edit-task-form"
+            class="bg-surface-container-lowest text-on-surface rounded-xl p-6 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] max-w-[32rem] max-h-[90vh] overflow-y-auto flex flex-col gap-4 shadow-xl">
 
             <div class="flex justify-between items-center">
-                <h2 class="font-headline-lg font-bold">
+                <h2 class="font-headline-lg text-headline-lg font-bold text-on-surface">
                     Edit Task
                 </h2>
 
-                <button type="button" id="close-edit-modal" class="p-2 rounded-lg hover:bg-gray-100">
-
+                <button type="button" id="close-edit-modal" aria-label="Close"
+                    class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors size-10 ">
                     <span class="material-symbols-outlined">
                         close
                     </span>
-
                 </button>
             </div>
 
             <input type="hidden" id="edit-task-id">
 
             <div>
-                <label for="edit-task-name">
+                <label for="edit-task-name" class="font-body-sm text-body-sm font-medium text-on-surface-variant">
                     Task Name
                 </label>
 
-                <input type="text" id="edit-task-name" name="taskName" class="border rounded-lg p-2 w-full" required>
+                <input type="text" id="edit-task-name" name="taskName"
+                    class="border border-outline-variant rounded-lg p-2 w-full bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                    required>
             </div>
 
             <div>
-                <label for="edit-task-description">
+                <label for="edit-task-description" class="font-body-sm text-body-sm font-medium text-on-surface-variant">
                     Description
                 </label>
 
                 <textarea id="edit-task-description" name="description"
-                    class="border rounded-lg p-2 w-full min-h-32"></textarea>
+                    class="border border-outline-variant rounded-lg p-2 w-full min-h-32 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"></textarea>
             </div>
 
-            <div class="flex gap-4">
+            <div class="flex flex-wrap gap-4">
 
                 <div>
-                    <label for="edit-task-status">
+                    <label for="edit-task-status" class="font-body-sm text-body-sm font-medium text-on-surface-variant block mb-1">
                         Status
                     </label>
 
-                    <select id="edit-task-status" name="status" class="border rounded-lg p-2">
-
+                    <select id="edit-task-status" name="status"
+                        class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary">
                         <option value="todo">TODO</option>
                         <option value="doing">DOING</option>
                         <option value="done">DONE</option>
-
                     </select>
                 </div>
 
                 <div>
-                    <label for="edit-task-priority">
+                    <label for="edit-task-priority" class="font-body-sm text-body-sm font-medium text-on-surface-variant block mb-1">
                         Priority
                     </label>
 
-                    <select id="edit-task-priority" name="priority" class="border rounded-lg p-2">
-
+                    <select id="edit-task-priority" name="priority"
+                        class="border border-outline-variant rounded-lg p-2 bg-surface-container-lowest text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary">
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
-                        <option value="urgent">Urgent</option>
-
                     </select>
                 </div>
 
@@ -410,16 +438,14 @@
 
             <div class="flex justify-end gap-2 mt-4">
 
-                <button type="button" id="cancel-edit" class="px-4 py-2 rounded-lg border hover:bg-gray-100">
-
+                <button type="button" id="cancel-edit"
+                    class="px-4 py-2 rounded-lg border border-outline-variant text-on-surface hover:bg-surface-container-high transition-colors">
                     Cancel
-
                 </button>
 
-                <button type="submit" id="edit-task-btn" class="px-4 py-2 rounded-lg bg-primary text-on-primary">
-
+                <button type="submit" id="edit-task-btn"
+                    class="px-4 py-2 rounded-lg bg-primary text-on-primary hover:scale-[0.98] transition-transform">
                     Save Changes
-
                 </button>
 
             </div>

@@ -33,31 +33,19 @@ function rehydrateTask(data) {
     let task;
 
     if (data.deadline !== undefined && data.deadline !== null) {
-        task = new UrgentTask(
-            data.title,
-            data.description,
-            data.status,
-            data.deadline
-        );
+        task = new UrgentTask(data.title, data.description, data.status, data.deadline);
     } else {
-        task = new Task(
-            data.title,
-            data.description,
-            data.status,
-            data.priority
-        );
+        task = new Task(data.title, data.description, data.status, data.priority);
     }
 
-    // Restore original values
+    // Preserve the original id and createdAt instead of the freshly generated ones
     task.id = data.id;
-
     if (data.createdAt) {
         task.createdAt = new Date(data.createdAt);
     }
 
-    // Keep counter ahead of existing IDs
+    // Keep the id counter ahead of any existing ids to avoid collisions
     const numericId = Number(data.id);
-
     if (!Number.isNaN(numericId) && numericId >= Task.counter) {
         Task.counter = numericId + 1;
     }
