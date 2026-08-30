@@ -1,15 +1,14 @@
 import { Task, UrgentTask } from "../model/task.js";
 
-const STORAGE_KEY = "taskforge_tasks"
+const STORAGE_KEY = "taskforge_tasks";
+
 export function saveTasks(tasks) {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    } catch {
-        throw new Error("Failed to save tasks");
+    } catch (error) {
+        throw new Error("Failed to save tasks", { cause: error });
     }
-
 }
-
 
 export function getTasks() {
     try {
@@ -20,31 +19,42 @@ export function getTasks() {
         }
 
         const parsed = JSON.parse(data);
+
+        if (!Array.isArray(parsed)) {
+            throw new Error("Stored tasks must be an array");
+        }
+
         return parsed.map(rehydrateTask);
     } catch (error) {
-        throw new Error("Failed to load tasks", {
-            cause: error
-        });
+        throw new Error("Failed to load tasks", { cause: error });
     }
 }
 
-// Convert a plain object from storage back into a Task/UrgentTask instance
 function rehydrateTask(data) {
-    let task;
+    const status = ["todo", "doing", "done"].includes(data.status)
+        ? data.status
+        : "todo";
 
-    if (data.deadline !== undefined && data.deadline !== null) {
-        task = new UrgentTask(data.title, data.description, data.status, data.deadline);
-    } else {
-        task = new Task(data.title, data.description, data.status, data.priority);
-    }
+    const hasDeadline = data.deadline !== undefined && data.deadline !== null && data.deadline !== "";
 
-    // Preserve the original id and createdAt instead of the freshly generated ones
-    task.id = data.id;
+    const task = hasDeadline
+        ? new UrgentTask(data.title ?? "", data.description ?? "", status, data.deadline)
+        : new Task(
+            data.title ?? "",
+            data.description ?? "",
+            status,
+            ["low", "medium", "high"].includes(data.priority) ? data.priority : "low"
+        );
+
+    task.id = String(data.id);
+
     if (data.createdAt) {
-        task.createdAt = new Date(data.createdAt);
+        const createdAt = new Date(data.createdAt);
+        if (!Number.isNaN(createdAt.getTime())) {
+            task.createdAt = createdAt;
+        }
     }
 
-    // Keep the id counter ahead of any existing ids to avoid collisions
     const numericId = Number(data.id);
     if (!Number.isNaN(numericId) && numericId >= Task.counter) {
         Task.counter = numericId + 1;
@@ -54,5 +64,5 @@ function rehydrateTask(data) {
 }
 
 export function clearTasks() {
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(STORAGE_KEY);
 }
